@@ -1,0 +1,45 @@
+name: 'Terraform'
+
+on: push
+
+permissions:
+  contents: read
+
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_REGION: "us-east-1"
+  MONGODB_ATLAS_PUBLIC_KEY: ${{ secrets.MONGODB_ATLAS_PUBLIC_KEY }}
+  MONGODB_ATLAS_PRIVATE_KEY: ${{ secrets.MONGODB_ATLAS_PRIVATE_KEY }}
+  MONGODB_REGION: "US-EAST-1"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Get IP Addresses
+        uses: candidob/get-runner-ip@v1.0.0
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v1
+
+      - name: Terraform init
+        id: init
+        run: |
+          cd main
+          terraform init
+
+      - name: Terraform plan
+        id: plan
+        run: |
+          cd main
+          terraform plan
+
+      - name: Teraform apply
+        id: apply
+        run: |
+          cd main
+          terraform apply -auto-approve
