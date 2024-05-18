@@ -23,10 +23,16 @@ resource "random_password" "db-user-password" {
   override_special = "_%@"
 }
 
+// Create Database IP Access List
+resource "mongodbatlas_project_ip_access_list" "ip" {
+project_id = mongodbatlas_project.atlas-project.id
+ip_address = var.ip_address  
+}
+
 // Create an Atlas Advanced Cluster
 resource "mongodbatlas_advanced_cluster" "atlas-cluster" {
   project_id             = mongodbatlas_project.atlas-project.id
-  name                   = "myFirstProject-${var.environment}-cluster"
+  name                   = var.mongodbatlas_cluster_name
   cluster_type           = "REPLICASET"
   backup_enabled         = true
   mongo_db_major_version = "6.0"

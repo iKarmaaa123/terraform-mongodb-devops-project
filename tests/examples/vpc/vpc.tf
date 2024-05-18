@@ -1,9 +1,8 @@
-// vpc
 resource "aws_vpc" "my_vpc" {
   cidr_block = var.vpc_cidr_block
 
   tags = {
-    Name = "mongodb-vpc"
+    Name = var.vpc_name
   }
 }
 
@@ -18,26 +17,22 @@ resource "aws_default_security_group" "default" {
   }
 
   egress {
+    protocol    = "-1"
+    self        = true
     from_port   = 0
     to_port     = 0
-    protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
 
-// vpc flow logs
-resource "aws_flow_log" "example" {
-  traffic_type = "ALL"
-  vpc_id       = aws_vpc.my_vpc.id
-}
-
 // subnet
 resource "aws_subnet" "my_subnet" {
+  cidr_block = var.subnet_cidr_block
   vpc_id            = aws_vpc.my_vpc.id
   availability_zone = var.availability_zone
 
   tags = {
-    Name = "mongodb-subnet"
+    Name = var.public_subnet_name
   }
 }
 
@@ -60,7 +55,7 @@ resource "aws_route_table" "my_route_table" {
   }
 
   tags = {
-    Name = "mongbdb_route_table"
+    Name = var.route_table_name
   }
 }
 
