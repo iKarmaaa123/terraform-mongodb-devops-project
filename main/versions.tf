@@ -1,4 +1,4 @@
-// Configure the MongoDB Atlas Provider 
+// configure the MongoDB Atlas Provider 
 terraform {
   required_version = ">= 1.0"
 
