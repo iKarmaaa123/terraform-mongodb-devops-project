@@ -1,3 +1,4 @@
+// mongodb atlas region
 variable "atlas_region" {
   type    = string
   default = "US_EAST_1"
@@ -9,7 +10,7 @@ variable "atlas_project_name" {
   default = "terraformProject"
 }
 
-// Atlas Organisation ID
+// atlas organisation id
 variable "atlas_org_id" {
   type    = string
   default = "65e24d75b0bbab5dbe0ebe25"

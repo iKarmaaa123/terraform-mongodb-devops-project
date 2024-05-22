@@ -14,6 +14,7 @@ terraform {
   }
 }
 
+// setting up s3 bucket for a remote backend
 terraform {
   backend "s3" {
     bucket = "terraform-mongodb-project"
