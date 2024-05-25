@@ -15,8 +15,8 @@ This specific file ensures that no important files that contain sensitive inform
 <h2> cluster.tf </h2>
 This cluster.tf file contains a terraform configuration that sets up a MongoDB Atlas project with a secured databse cluster, user, and access control. The  following resources are created and configured:
 
-MongoDB Atlas Project:
 
+MongoDB Atlas Project:
 ```hcl
 resource "mongodbatlas_project" "atlas-project" {
   org_id = var.atlas_org_id
