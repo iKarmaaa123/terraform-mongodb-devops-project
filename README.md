@@ -26,7 +26,6 @@ resource "mongodbatlas_project" "atlas-project" {
 A new MongoDB Atlas project is created within the specified organization using the provided project name.
 
 Database User:
-
 ```hcl
 resource "mongodbatlas_database_user" "db-user" {
   username           = var.username
