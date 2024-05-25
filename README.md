@@ -22,9 +22,7 @@ resource "mongodbatlas_project" "atlas-project" {
   org_id = var.atlas_org_id
   name   = var.atlas_project_name
 }
-```
-Project: A new MongoDB Atlas project is created within the specified organization using the provided project name.
-
+```A new MongoDB Atlas project is created within the specified organization using the provided project name.
 
 Database User:
 ```hcl
@@ -38,7 +36,7 @@ resource "mongodbatlas_database_user" "db-user" {
     database_name = var.atlas_project_name
   }
 }
-
+```
 Database User: A database user with read and write access to the specific database is created. The password is generated securely and associated with the project
 
 
