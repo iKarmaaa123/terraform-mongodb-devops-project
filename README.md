@@ -22,7 +22,7 @@ resource "mongodbatlas_project" "atlas-project" {
   org_id = var.atlas_org_id
   name   = var.atlas_project_name
 }
-
+```
 Project: A new MongoDB Atlas project is created within the specified organization using the provided project name.
 
 Database User:
