@@ -17,6 +17,7 @@ This cluster.tf file contains a terraform configuration that sets up a MongoDB A
 
 MongoDB Atlas Project:
 
+```hcl
 resource "mongodbatlas_project" "atlas-project" {
   org_id = var.atlas_org_id
   name   = var.atlas_project_name
