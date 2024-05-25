@@ -9,7 +9,21 @@ Now that I provided a brief overview for the project, I will delve into the vari
 <h2> Cluster Module </h2>
 The cluster module comprises a number of files: .gitignore, cluster.tf, output.tf, terraform.tfvars, variables.tf, and versions.tf.
 
-<h1> .gitignore file </h1>
-this specific file ensures that no important files that contain sensitive information are pushed to the GitHub repository.
+<h2> .gitignore file </h2>
+This specific file ensures that no important files that contain sensitive information are pushed to the GitHub repository.
+
+<h2> cluster.tf </h2>
+This cluster.tf file contains a terraform configuration that sets up a MongoDB Atlas project with a secured databse cluster, user, and access control. The  following resources are created and configured:
+
+MongoDB Atlas Project:
+
+resource "mongodbatlas_project" "atlas-project" {
+  org_id = var.atlas_org_id
+  name   = var.atlas_project_name
+}
+Project: A new MongoDB Atlas project is created within the specified organization using the provided project name.
+
+
+
 
 
