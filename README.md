@@ -7,4 +7,9 @@ This Terraform project focuses on deploying a mongodb atlas cluster to mongodb a
 Now that I provided a brief overview for the project, I will delve into the various parts of the project, and discuss these parts in great depth as a way to give you, the reader, a deeper understanding of how this project is built, and how you can create this project for yourself as well.
 
 <h2> Cluster Module </h2>
-The cluster module comprises a number of different directories:
+The cluster module comprises a number of files: .gitignore, cluster.tf, output.tf, terraform.tfvars, variables.tf, and versions.tf.
+
+<h1> .gitignore file </h1>
+this specific file ensures that no important files that contain sensitive information are pushed to the GitHub repository.
+
+
