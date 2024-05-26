@@ -119,7 +119,32 @@ output "region_name" {
 ```
 Provides the region where the MongoDB Atlas cluster is deployed.
 
+Project Name:
+```hcl
+output "project_name" {
+  value = "terraformProject"
+}
+```
+Provides the name of the Terraform project.
 
+Organisation ID:
+```hcl
+output "organisation_id" {
+  value = "65e24d75b0bbab5dbe0ebe25"
+}
+```
+Provides the ID of the organisation in MongoDB Atlas.
+
+<h2> Terraform.tfvars </h2>
+These are the custom variable names that you should use for the project:
+```hcl
+provider_name         = "AWS"
+atlas_region          = "US_EAST_1"
+acceptor_region_name  = "US_EAST_1"
+atlas_org_id          = "65e24d75b0bbab5dbe0ebe25"
+environment           = "dev"
+ip_address            = "86.139.204.225"
+```
 
 
 
