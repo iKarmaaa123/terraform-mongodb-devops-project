@@ -11,10 +11,10 @@ Now that I provided a brief overview for the project, I will delve into the vari
 <h2> Cluster Module </h2>
 The cluster module comprises a number of files: .gitignore, cluster.tf, output.tf, terraform.tfvars, variables.tf, and versions.tf.
 
-<h2> .gitignore file </h2>
+<h3> .gitignore file </h3>
 This specific file ensures that no important files that contain sensitive information are pushed to the GitHub repository.
 
-<h2> cluster.tf </h2>
+<h3> cluster.tf </h3>
 This cluster.tf file contains a terraform configuration that sets up a MongoDB Atlas project with a secured databse cluster, user, and access control. The  following resources are created and configured:
 
 
@@ -92,7 +92,7 @@ Backup: Enabled
 MongoDB Version 6.0
 Replication Specs: Configured with an electable node set and analytic node set, both using AWS inthe 'US_EAST_1' region. The electable set consists of 3 nodes of size M10, and the analytics set consists of 1 node of M10.
 
-<h2> Outputs </h2>
+<h3> Outputs </h3>
 These outputs are primarily intended for use in Terratest with Go to validate various parts of the infrastructure:
 
 MongoDB Atlas Project ID:
@@ -135,7 +135,7 @@ output "organisation_id" {
 ```
 Provides the ID of the organisation in MongoDB Atlas.
 
-<h2> Variables.tf </h2>
+<h3> Variables.tf </h3>
 The following variables are used to configure the MongoDB Atlas project and its associated resources. Each variable has a default value which can be overridden as needed using a terraform.tfvars file (this will be shown in the following section):
 MongoDB Atlas Region:
 
@@ -213,7 +213,60 @@ username               = "YOUR_CUSTOM_USERNAME"
 mongodbatlas_cluster_name = "YOUR_CUSTOM_CLUSTER_NAME"
 ip_address             = "YOUR_CUSTOM_IP_ADDRESS"
 ```
-Change the values for the custom variables for your own project.
+<h3> Versions.tf </h3>
+This file is mostly used for defining the versions for both terraform, and the providers that you will be using in your own respective project. Here is a rundown of how this file is structured, and what each part of this configuration code means.
+
+Terraform Block
+The following terraform block specifies the required Terraform version and the providers necessary for this configuration. Each provider is essential for different aspects of the infrastructure setup:
+```hcl
+terraform {
+  required_version = ">= 1.0"
+
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+    mongodbatlas = {
+      source  = "mongodb/mongodbatlas"
+      version = "~> 1.15.0"
+    }
+    random = {
+      source  = "hashicorp/random"
+      version = "~> 3.6.0"
+    }
+  }
+}
+```
+required_version: Specifies the minimum required version of Terraform to use this configuration. In this case, the configuration requires Terraform version 1.0 or higher.
+
+AWS Provider:
+```hcl
+aws = {
+  source  = "hashicorp/aws"
+  version = "~> 5.0"
+}
+```
+The AWS provider is used to interact with the AWS services. In this configuration, it is necessary for provisioning and managing AWS infrastructure that supports the MongoDB Atlas cluster.
+
+MongoDB Atlas Provider:
+```hcl
+mongodbatlas = {
+  source  = "mongodb/mongodbatlas"
+  version = "~> 1.15.0"
+}
+```
+The MongoDB Atlas provider allows Terraform to manage MongoDB Atlas resources such as projects, clusters, and database users. This provider is critical for setting up and configuring the MongoDB Atlas environment.
+
+Random Provider:
+```hcl
+random = {
+  source  = "hashicorp/random"
+  version = "~> 3.6.0"
+}
+```
+The Random provider is used to generate random values, such as passwords. In this configuration, it is used to create secure random passwords for the MongoDB Atlas database users.
+
 
 
 
