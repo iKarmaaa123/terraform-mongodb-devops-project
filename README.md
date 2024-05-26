@@ -11,6 +11,16 @@ Now that I provided a brief overview for the project, I will delve into the vari
 <h2> Cluster Module </h2>
 The cluster module comprises a number of files: .gitignore, cluster.tf, output.tf, terraform.tfvars, variables.tf, and versions.tf.
 
+Here is a graphic that shows the directory structure for this module:
+```hcl
+cluster/
+.gitignore
+cluster.tf
+output.tf
+terraform.tfvars
+variables.tf
+versions.tf
+```
 <h3> .gitignore file </h3>
 This specific file ensures that no important files that contain sensitive information are pushed to the GitHub repository.
 
