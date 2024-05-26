@@ -135,8 +135,20 @@ output "organisation_id" {
 ```
 Provides the ID of the organisation in MongoDB Atlas.
 
+<h2> Variables.tf </h2>
+The following variables are used to configure the MongoDB Atlas project and its associated resources. Each variable has a default value which can be overridden as needed using a terraform.tfvars file (this will be shown in the following section):
+```hcl
+variable "atlas_region" {
+  type    = string
+  default = "US_EAST_1"
+}
+```
+
+
+
 <h2> Terraform.tfvars </h2>
 These are the custom variable names that you should use for the project:
+
 ```hcl
 provider_name         = "AWS"
 atlas_region          = "US_EAST_1"
@@ -145,6 +157,9 @@ atlas_org_id          = "65e24d75b0bbab5dbe0ebe25"
 environment           = "dev"
 ip_address            = "86.139.204.225"
 ```
+Change the values for the custom variables for your own project.
+
+
 
 
 
