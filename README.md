@@ -201,7 +201,7 @@ variable "ip_address" {
 ```
 The IP address allowed to access the MongoDB Atlas cluster. This is used for IP whitelisting to ensure only trusted IPs can connect to the database. The default IP address is 86.157.19.11.
 
-<h2> Terraform.tfvars </h2>
+<h1> Terraform.tfvars </h1>
 To override the default values, create a terraform.tfvars file with your custom values:
 
 ```hcl
