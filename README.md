@@ -137,7 +137,6 @@ Provides the ID of the organisation in MongoDB Atlas.
 
 <h2> Terraform.tfvars </h2>
 These are the custom variable names that you should use for the project:
-
 ```hcl
 provider_name         = "AWS"
 atlas_region          = "US_EAST_1"
