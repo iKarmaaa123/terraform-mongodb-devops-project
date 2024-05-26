@@ -137,25 +137,81 @@ Provides the ID of the organisation in MongoDB Atlas.
 
 <h2> Variables.tf </h2>
 The following variables are used to configure the MongoDB Atlas project and its associated resources. Each variable has a default value which can be overridden as needed using a terraform.tfvars file (this will be shown in the following section):
+MongoDB Atlas Region:
+
 ```hcl
 variable "atlas_region" {
   type    = string
   default = "US_EAST_1"
 }
 ```
+Specifies the region where the MongoDB Atlas cluster will be deployed. The default region is US_EAST_1.
 
+Atlas Project Name:
+```hcl
+variable "atlas_project_name" {
+  type    = string
+  default = "terraformProject"
+}
+```
+The name of the MongoDB Atlas project. The default project name is terraformProject.
 
+Atlas Organization ID:
+```hcl
+variable "atlas_org_id" {
+  type    = string
+  default = "65e24d75b0bbab5dbe0ebe25"
+}
+```
+The organization ID for MongoDB Atlas. This ID is used to associate the project with the correct MongoDB Atlas organization. The default organization ID is 65e24d75b0bbab5dbe0ebe25.
+
+CIDR Value for Atlas Database:
+```hcl
+variable "atlas_cidr_block" {
+  type    = string
+  default = "192.168.0.0/21"
+}
+```
+Specifies the CIDR block for the MongoDB Atlas database. This is used for networking and access control purposes. The default CIDR block is 192.168.0.0/21.
+
+Username for MongoDB Atlas Account:
+```hcl
+variable "username" {
+  type    = string
+  default = "user-1"
+}
+```
+The username for the MongoDB Atlas database user account. This user will have access to the database. The default username is user-1.
+
+MongoDB Atlas Cluster Name:
+```hcl
+variable "mongodbatlas_cluster_name" {
+  type    = string
+  default = "myFirstProject-Cluster"
+}
+```
+The name of the MongoDB Atlas cluster. The cluster is where the databases will be hosted. The default cluster name is myFirstProject-Cluster.
+
+IP Address for Database Access:
+```hcl
+variable "ip_address" {
+  type = string
+  default = "86.157.19.11"
+}
+```
+The IP address allowed to access the MongoDB Atlas cluster. This is used for IP whitelisting to ensure only trusted IPs can connect to the database. The default IP address is 86.157.19.11.
 
 <h2> Terraform.tfvars </h2>
-These are the custom variable names that you should use for the project:
+To override the default values, create a terraform.tfvars file with your custom values:
 
 ```hcl
-provider_name         = "AWS"
-atlas_region          = "US_EAST_1"
-acceptor_region_name  = "US_EAST_1"
-atlas_org_id          = "65e24d75b0bbab5dbe0ebe25"
-environment           = "dev"
-ip_address            = "86.139.204.225"
+atlas_region           = "YOUR_CUSTOM_REGION"
+atlas_project_name     = "YOUR_CUSTOM_PROJECT_NAME"
+atlas_org_id           = "YOUR_CUSTOM_ORG_ID"
+atlas_cidr_block       = "YOUR_CUSTOM_CIDR_BLOCK"
+username               = "YOUR_CUSTOM_USERNAME"
+mongodbatlas_cluster_name = "YOUR_CUSTOM_CLUSTER_NAME"
+ip_address             = "YOUR_CUSTOM_IP_ADDRESS"
 ```
 Change the values for the custom variables for your own project.
 
