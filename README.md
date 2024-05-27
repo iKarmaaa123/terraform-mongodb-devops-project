@@ -456,6 +456,7 @@ Specifies the availability zone for the subnet. The default value is us-east-1a.
 
 <h3> Terraform.tfvars </h3>
 To override the default values, create a terraform.tfvars file with your custom values:
+
 ```hcl
 provider_name          = "YOUR_CUSTOM_PROVIDER_NAME"
 internet_gateway_name  = "YOUR_CUSTOM_INTERNET_GATEWAY_NAME"
