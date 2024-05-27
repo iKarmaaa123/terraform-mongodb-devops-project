@@ -277,6 +277,21 @@ random = {
 ```
 The Random provider is used to generate random values, such as passwords. In this configuration, it is used to create secure random passwords for the MongoDB Atlas database users.
 
+<h2> VPC Module </h2>
+Now that we have discussed about the various contents of the 'cluster' module, we will now discuss about the 'VPC' module which will create the resources needed for the vpc infrastructure that is going to have a peering connection with our mongodb atlas cluster.
+
+Here is a graphical visualisation of what the VPC module looks like:
+```hcl
+vpc/
+├── .gitignore
+├── output.tf
+├── terraform.tfvars
+├── variables.tf
+└── vpc.tf
+```
+
+
+
 
 
 
