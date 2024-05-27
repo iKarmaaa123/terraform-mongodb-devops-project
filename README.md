@@ -289,6 +289,221 @@ vpc/
 ├── variables.tf
 └── vpc.tf
 ```
+<h3> vpc.tf </h3>
+The following resources are used to set up a Virtual Private Cloud (VPC) and associated networking components in AWS using Terraform. Each resource is configured with specific parameters and tags:
+
+AWS VPC:
+```hcl
+resource "aws_vpc" "my_vpc" {
+  cidr_block = var.vpc_cidr_block
+
+  tags = {
+    Name = var.vpc_name
+  }
+}
+```
+Creates a new Virtual Private Cloud (VPC) with the specified CIDR block and name.
+
+AWS Default Security Group:
+```hcl
+resource "aws_default_security_group" "default" {
+  vpc_id = aws_vpc.my_vpc.id
+
+  ingress {
+    protocol  = "-1"
+    self      = true
+    from_port = 0
+    to_port   = 0
+  }
+
+  egress {
+    protocol    = "-1"
+    self        = true
+    from_port   = 0
+    to_port     = 0
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+```
+Configures the default security group for the VPC to allow all inbound and outbound traffic.
+
+AWS Subnet:
+```hcl
+resource "aws_subnet" "my_subnet" {
+  cidr_block = var.subnet_cidr_block
+  vpc_id            = aws_vpc.my_vpc.id
+  availability_zone = var.availability_zone
+
+  tags = {
+    Name = var.public_subnet_name
+  }
+}
+```
+Creates a new subnet within the specified VPC, CIDR block, and availability zone.
+
+AWS Internet Gateway:
+```hcl
+resource "aws_internet_gateway" "gw" {
+  vpc_id = aws_vpc.my_vpc.id
+
+  tags = {
+    Name = var.internet_gateway_name
+  }
+}
+```
+Creates an Internet Gateway for the VPC, allowing the VPC to connect to the internet.
+
+AWS Route Table:
+```hcl
+resource "aws_route_table" "my_route_table" {
+  vpc_id = aws_vpc.my_vpc.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.gw.id
+  }
+
+  tags = {
+    Name = var.route_table_name
+  }
+}
+```
+Creates a route table for the VPC with a route that directs all traffic to the Internet Gateway.
+
+AWS Route Table Association:
+```hcl
+resource "aws_route_table_association" "my_route_table_association" {
+  subnet_id      = aws_subnet.my_subnet.id
+  route_table_id = aws_route_table.my_route_table.id
+}
+```
+Associates the specified subnet with the route table, enabling the subnet to use the routes defined in the route table.
+
+<h3> Variables.tf </h3>
+The following variables are used to configure the AWS VPC and its associated resources. Each variable has a default value which can be overridden as needed.
+
+Provider Name:
+```hcl
+variable "provider_name" {
+  type    = string
+  default = "AWS"
+}
+```
+Specifies the cloud provider to use. The default value is AWS.
+
+Internet Gateway Name:
+```hcl
+variable "internet_gateway_name" {
+  type    = string
+  default = "mongodb-internet-gateway"
+}
+```
+The name tag for the Internet Gateway. The default name is mongodb-internet-gateway.
+
+VPC CIDR Block:
+```hcl
+variable "vpc_cidr_block" {
+  type    = string
+  default = "10.0.0.0/16"
+}
+```
+Specifies the CIDR block for the VPC. The default value is 10.0.0.0/16.
+
+Public Subnet CIDR Block:
+```hcl
+variable "subnet_cidr_block" {
+  type = string
+  default = "10.0.0.0/24"
+}
+```
+ Specifies the CIDR block for the public subnet within the VPC. The default value is 10.0.0.0/24.
+
+ VPC Name:
+ ```hcl
+ variable "vpc_name" {
+  type = string
+  default = "mongodb-vpc"
+}
+```
+The name tag for the VPC. The default name is mongodb-vpc.
+
+Public Subnet Name:
+ ```hcl
+variable "public_subnet_name" {
+  type = string
+  default = "mongodb-subnet"
+}
+ ```
+The name tag for the public subnet. The default name is mongodb-subnet.
+
+Route Table Name:
+```hcl
+variable "route_table_name" {
+  type = string
+  default = "mongodb-route-table"
+}
+```
+The name tag for the route table. The default name is mongodb-route-table.
+
+Availability Zone:
+```hcl
+variable "availability_zone" {
+  type    = string
+  default = "us-east-1a"
+}
+```
+Specifies the availability zone for the subnet. The default value is us-east-1a.
+
+<h3> Terraform.tfvars </h3>
+To override the default values, create a terraform.tfvars file with your custom values:
+```hcl
+provider_name          = "YOUR_CUSTOM_PROVIDER_NAME"
+internet_gateway_name  = "YOUR_CUSTOM_INTERNET_GATEWAY_NAME"
+vpc_cidr_block         = "YOUR_CUSTOM_VPC_CIDR_BLOCK"
+subnet_cidr_block      = "YOUR_CUSTOM_SUBNET_CIDR_BLOCK"
+vpc_name               = "YOUR_CUSTOM_VPC_NAME"
+public_subnet_name     = "YOUR_CUSTOM_PUBLIC_SUBNET_NAME"
+route_table_name       = "YOUR_CUSTOM_ROUTE_TABLE_NAME"
+availability_zone      = "YOUR_CUSTOM_AVAILABILITY_ZONE"
+```
+<h3> Outputs.tf </h3>
+The following outputs provide essential information about the AWS VPC and its associated resources. Some of these outputs are primarily intended for use in Terratests to validate the infrastructure setup:
+
+VPC ID:
+```hcl
+output "vpc_id" {
+    value = aws_vpc.my_vpc.id
+}
+```
+The output for the ID of the created VPC.
+
+Route Table CIDR Block:
+```hcl
+output "route_table_cidr_block" {
+    value = aws_vpc.my_vpc.cidr_block
+}
+```
+The output for the CIDR block of the VPC associated with the route table.
+
+Route Table ID:
+```hcl
+output "route_table_id" {
+    value = aws_route_table.my_route_table.id
+}
+```
+The output for the ID of the created route table.
+
+AWS Account ID:
+```hcl
+output "aws_account_id" {
+    value = "648767092427"
+}
+```
+The AWS account ID. This is a static value representing the account under which the resources are created. This output can be used in Terratests to confirm that the resources are being created in the correct AWS account.
+
+
+
+
 
 
 
