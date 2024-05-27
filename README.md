@@ -14,12 +14,12 @@ The cluster module comprises a number of files: .gitignore, cluster.tf, output.t
 Here is a graphic that shows the directory structure for this module:
 ```hcl
 cluster/
-.gitignore
-cluster.tf
-output.tf
-terraform.tfvars
-variables.tf
-versions.tf
+├── .gitignore
+├── cluster.tf
+├── output.tf
+├── terraform.tfvars
+├── variables.tf
+└── versions.tf
 ```
 <h3> .gitignore file </h3>
 This specific file ensures that no important files that contain sensitive information are pushed to the GitHub repository.
