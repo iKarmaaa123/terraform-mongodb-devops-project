@@ -586,7 +586,9 @@ This directory contains the CI/CD(continuous integration and continuous delivery
 
 <h3> GitHub Actions Workflow for Terraform </h3>
 
-This GitHub Actions workflow automates the deployment of your Terraform configurations whenever there is a push to the repository. It sets up the necessary environment, checks out the code, and runs the Terraform commands to initialize, plan, and apply the configurations:
+This GitHub Actions workflow automates the deployment of your Terraform configurations whenever there is a push to the repository. It sets up the necessary environment, checks out the code, and runs the Terraform commands to initialize, plan, and apply the configurations.
+
+This workflow ensures that your Terraform configurations are automatically deployed and managed whenever there is a change in the repository, leveraging the capabilities of GitHub Actions for CI/CD.
 
 ```hcl
 name: 'Terraform'
@@ -636,13 +638,92 @@ jobs:
           terraform apply -auto-approve
 
   ```
+Trigger:
 
+```hcl
+on: push
+```
+The workflow is triggered by any push to the repository.
 
+Permissions:
+```hcl
+permissions:
+  contents: read
+```
+Sets the permissions for the workflow. In this case, it allows read access to the contents.
 
+Environment Variables:
+```hcl
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_REGION: "us-east-1"
+  MONGODB_ATLAS_PUBLIC_KEY: ${{ secrets.MONGODB_ATLAS_PUBLIC_KEY }}
+  MONGODB_ATLAS_PRIVATE_KEY: ${{ secrets.MONGODB_ATLAS_PRIVATE_KEY }}
+  MONGODB_REGION: "US-EAST-1"
+```
+Sets the environment variables needed for AWS and MongoDB Atlas authentication using secrets stored in GitHub.
 
+Jobs:
+```hcl
+jobs:
+  build:
+    runs-on: ubuntu-latest
+```
+Defines the build job that runs on the latest version of Ubuntu. A job is a set of steps in a workflow that is executed on the same runner. Each step is either a shell script that will be executed, or an action that will be run. Steps are executed in order and are dependent on each other. Since each step is executed on the same runner, you can share data from one step to another.
 
+Checkout Code:
 
+```hcl
+- name: Checkout
+  uses: actions/checkout@v3
+```
+This step uses the checkout action to clone the repository's code into the GitHub Actions runner.
 
+Get IP Addresses:
 
+```hcl
+- name: Get IP Addresses
+  uses: candidob/get-runner-ip@v1.0.0
+```
+This step uses the get-runner-ip action to retrieve the IP addresses of the GitHub Actions runner. This might be useful for configuring access lists or security groups.
 
+Set Up Terraform:
 
+```hcl
+- name: Set up Terraform
+  uses: hashicorp/setup-terraform@v1
+```
+This step uses the setup-terraform action to install the specified version of Terraform CLI on the runner, ensuring the correct version is used.
+
+Terraform Init:
+```hcl
+- name: Terraform init
+  id: init
+  run: |
+    cd main
+    terraform init
+```
+This step initializes the Terraform configuration in the main directory by running the terraform init command. It downloads the necessary provider plugins and sets up the backend configuration.
+
+Terraform Plan:
+```hcl
+- name: Terraform plan
+  id: plan
+  run: |
+    cd main
+    terraform plan
+```
+This step creates an execution plan for Terraform by running the terraform plan command in the main directory. It shows what actions Terraform will take to achieve the desired state defined in the configuration files.
+
+Terraform Apply:
+```hcl
+- name: Terraform apply
+  id: apply
+  run: |
+    cd main
+    terraform apply -auto-approve
+```
+This step applies the Terraform configuration by running the terraform apply -auto-approve command in the main directory. The -auto-approve flag automatically approves the changes without waiting for manual confirmation.
+
+<h2> tests </h2>
