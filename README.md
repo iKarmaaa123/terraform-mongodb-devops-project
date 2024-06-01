@@ -502,12 +502,140 @@ output "aws_account_id" {
 ```
 The AWS account ID. This is a static value representing the account under which the resources are created. This output can be used in Terratests to confirm that the resources are being created in the correct AWS account.
 
-<h2> Main </h2>
+<h2> main </h2>
+The main directory will combine the work we did in the 'cluster' module directory and 'VPC' module directory. I will not provide a overview for the .gitignore file or the versions.tf file as they have already been provided explained. Here is an overview of what the directory structure looks like:
 
+```hcl
+# Directory structure for 'main' directory
+main/
+├── .gitignore
+├── main.tf
+└── versions.tf
+```
 
+<h3> main.tf </h3>
+This configuration sets up a MongoDB Atlas cluster and an AWS VPC, then establishes a network peering connection between them.
 
+MongoDB Atlas Cluster Module:
 
+```hcl
+module "cluster" {
+    source = "../modules/cluster"
+}
+```
+This module sets up the MongoDB Atlas cluster. The source points to the cluster module directory.
 
+AWS VPC Module:
+
+```hcl
+module "vpc" {
+    source = "../modules/vpc"
+}
+```
+
+MongoDB Atlas Network Peering:
+
+resource "mongodbatlas_network_peering" "peering" {
+  project_id             = module.cluster.mongodb_atlas_project_id
+  atlas_cidr_block       = module.cluster.mongodb_atlas_cidr_block
+  container_id           = mongodbatlas_network_container.test.id
+  accepter_region_name   = "US_EAST_1"
+  provider_name          = "AWS"
+  route_table_cidr_block = module.vpc.route_table_cidr_block
+  vpc_id                 = module.vpc.vpc_id
+  aws_account_id         = module.vpc.aws_account_id
+}
+This resource creates a network peering connection between the MongoDB Atlas cluster and the AWS VPC.
+
+MongoDB Atlas Network Container:
+```hcl
+resource "mongodbatlas_network_container" "test" {
+  project_id       = module.cluster.mongodb_atlas_project_id
+  atlas_cidr_block = module.cluster.mongodb_atlas_cidr_block
+  provider_name    = "AWS"
+  region_name      = "US_EAST_1"
+}
+```
+This resource creates a network container for the MongoDB Atlas cluster, necessary for peering.
+
+AWS VPC Peering Connection Accepter:
+```hcl
+resource "aws_vpc_peering_connection_accepter" "peering_accept" {
+  vpc_peering_connection_id = mongodbatlas_network_peering.peering.connection_id
+  auto_accept               = true
+
+  tags = {
+    Side = "Accepter"
+  }
+}
+```
+This resource accepts the VPC peering connection request from MongoDB Atlas.
+
+AWS Route to MongoDB Atlas:
+```hcl
+resource "aws_route" "to_mongodb_atlas" {
+  route_table_id            = module.vpc.route_table_id
+  destination_cidr_block    = mongodbatlas_network_peering.peering.atlas_cidr_block
+  vpc_peering_connection_id = mongodbatlas_network_peering.peering.connection_id
+}
+```
+This resource creates a route in the AWS route table to the MongoDB Atlas cluster through the VPC peering connection.
+
+<h2> .github/workflows </h2>
+This directory contains the CI/CD(continuous integration and continuous delivery) pipeline used to deployed the resources for this project to both MongoDB atlas and AWS.
+
+<h3> GitHub Actions Workflow for Terraform </h3>
+
+This GitHub Actions workflow automates the deployment of your Terraform configurations whenever there is a push to the repository. It sets up the necessary environment, checks out the code, and runs the Terraform commands to initialize, plan, and apply the configurations:
+
+```hcl
+name: 'Terraform'
+
+on: push
+
+permissions:
+  contents: read
+
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_REGION: "us-east-1"
+  MONGODB_ATLAS_PUBLIC_KEY: ${{ secrets.MONGODB_ATLAS_PUBLIC_KEY }}
+  MONGODB_ATLAS_PRIVATE_KEY: ${{ secrets.MONGODB_ATLAS_PRIVATE_KEY }}
+  MONGODB_REGION: "US-EAST-1"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Get IP Addresses
+        uses: candidob/get-runner-ip@v1.0.0
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v1
+
+      - name: Terraform init
+        id: init
+        run: |
+          cd main
+          terraform init
+
+      - name: Terraform plan
+        id: plan
+        run: |
+          cd main
+          terraform plan
+
+      - name: Terraform apply
+        id: apply
+        run: |
+          cd main
+          terraform apply -auto-approve
+
+  ```
 
 
 
