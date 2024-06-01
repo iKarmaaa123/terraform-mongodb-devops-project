@@ -937,6 +937,7 @@ func TestSubnetCidrBlockValue(t *testing.T) {
 <h2> vpc_cidr_block_value_test.go </h2>
 This terratest will also test to see if we are working with the correct VPC cidr block value when deploying our resources to AWS.
 
+```hcl
 package test
 
 import (
@@ -964,3 +965,5 @@ func TestVpcCidrBlockValue(t *testing.T) {
 	output := terraform.Output(t, terraformOptions, "vpc_cidr_block")
 	assert.Equal(t, "10.0.0.0/16", output)
 }
+
+```
