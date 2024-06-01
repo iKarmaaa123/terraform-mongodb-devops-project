@@ -22,7 +22,7 @@ cluster/
 └── versions.tf
 ```
 <h3> .gitignore file </h3>
-This specific file ensures that no important files that contain sensitive information are pushed to the GitHub repository.
+This specific file ensures that no important files that contain sensitive information or files that take up a lot of storage are pushed to the GitHub repository.
 
 <h3> cluster.tf </h3>
 This cluster.tf file contains a terraform configuration that sets up a MongoDB Atlas project with a secured databse cluster, user, and access control. The  following resources are created and configured:
@@ -727,3 +727,113 @@ Terraform Apply:
 This step applies the Terraform configuration by running the terraform apply -auto-approve command in the main directory. The -auto-approve flag automatically approves the changes without waiting for manual confirmation.
 
 <h2> tests </h2>
+Within this directory we will discuss about the various terratests used for testing various aspects of my infrastructure. Here is an overview of what this directory structure looks like:
+
+```hcl
+tests/
+├── examples/
+├── .gitignore
+├── aws_account_number_test.go
+├── organisation_id_test.go
+├── project_name_test.go
+├── subnet_cidr_block_value_test.go
+└── vpc_cidr_block_value_test.go
+```
+Now we will provide a in-depth view of all the files present within the tests directory.
+
+<h2> .gitignore </h2>
+Within this file we are choosing to ignore files such as the .terraform, go.mod and go.sum. These are files that take up way too much storage, and will cause issues when trying to deploy them to your respective github repo.
+
+<h2> aws_account_number_test.go </h2>
+This Go test file uses the Terratest library to test the Terraform configuration for the AWS account number value. The test ensures that the Terraform configuration is applied correctly and that the output matches the expected AWS account ID.
+
+```hcl
+package test
+
+import (
+	"testing"
+
+	"github.com/gruntwork-io/terratest/modules/terraform"
+	"github.com/stretchr/testify/assert"
+)
+
+func TestAWSAccountNumberValue(t *testing.T) {
+	// Construct the terraform options with default retryable errors to handle the most common
+	// retryable errors in terraform testing.
+	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
+		// Set the path to the Terraform code that will be tested.
+		TerraformDir: "./examples/vpc",
+	})
+
+	// Clean up resources with "terraform destroy" at the end of the test.
+	defer terraform.Destroy(t, terraformOptions)
+
+	// Run "terraform init" and "terraform apply". Fail the test if there are any errors.
+	terraform.InitAndApply(t, terraformOptions)
+
+	// Run `terraform output` to get the values of output variables and check they have the expected values.
+	output := terraform.Output(t, terraformOptions, "aws_account_id")
+	assert.Equal(t, "648767092427", output)
+}
+```
+<h4> Package Declaration </h4>
+
+```hcl
+package test
+```
+Declares the package name for the test file. In this case, the package is named test.
+
+<h4> Import Statements </h4>
+
+```hcl
+import (
+	"testing"
+	"github.com/gruntwork-io/terratest/modules/terraform"
+	"github.com/stretchr/testify/assert"
+)
+```
+Imports the necessary packages:
+
+testing: Provides support for automated testing of Go packages.
+
+terraform: Provides helper functions for running Terraform commands in tests.
+
+assert: Provides assertion functions for testing.
+
+<h4> Test Function </h4>
+```hcl
+func TestAWSAccountNumberValue(t *testing.T) {
+```
+Defines the test function TestAWSAccountNumberValue which will run the test. The t *testing.T parameter is used to log errors and report test failures.
+
+<h4> Terraform Options </h4>
+```hcl
+terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
+	// Set the path to the Terraform code that will be tested.
+	TerraformDir: "./examples/vpc",
+})
+```
+Constructs the Terraform options with default retryable errors. It sets the path to the Terraform code that will be tested ("./examples/vpc").
+
+<h4> Clean Up Resources </h4>
+```hcl
+defer terraform.Destroy(t, terraformOptions)
+```
+Schedules a cleanup of resources with terraform destroy at the end of the test, ensuring that any resources created during the test are destroyed.
+
+<h4> Initialize and Apply Terraform Configuration </h4>
+```hcl
+terraform.InitAndApply(t, terraformOptions)
+```
+Runs terraform init and terraform apply. If there are any errors during these operations, the test will fail.
+
+<h4> Check Output Values </h4>
+```hcl
+output := terraform.Output(t, terraformOptions, "aws_account_id")
+assert.Equal(t, "648767092427", output)
+```
+Runs terraform output to get the value of the aws_account_id output variable and checks that it matches the expected value (648767092427). If the output value does not match, the test will fail.
+
+
+
+
