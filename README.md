@@ -696,7 +696,7 @@ Set Up Terraform:
 ```
 This step uses the setup-terraform action to install the specified version of Terraform CLI on the runner, ensuring the correct version is used.
 
-Terraform Init:
+<h4> Terraform Init </h4>
 ```hcl
 - name: Terraform init
   id: init
