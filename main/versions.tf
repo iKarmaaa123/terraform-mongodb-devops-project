@@ -11,7 +11,6 @@ terraform {
       source = "mongodb/mongodbatlas"
       version = "~> 1.15.0"
     }
-  }
 }
 
 // setting up s3 bucket for a remote backend
@@ -20,5 +19,6 @@ terraform {
     bucket = "terraform-mongodb-project"
     key    = "statefile/terraform.tfstate"
     region = "us-east-1"
+    }
   }
 }
