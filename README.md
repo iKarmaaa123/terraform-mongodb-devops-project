@@ -2,16 +2,16 @@
 
 <h2> Project Overview </h2>
 
-This Terraform project focuses on deploying a mongodb atlas cluster to mongodb atlas where it will contain a database. The project utlises two modules - one module is centred around the cluster itself, and the second module is setting up the Virtual Private Cloud (VPC) which will be used for a peering connection with the mongodb atlas cluster which will, in turn, further improve the security of the cluster via having more ways to access the cluster, and not just through connecting to the cluster using the command line interface or CLI. 
+This Terraform project focuses on deploying a MongoDB Atlas cluster to MongoDB Atlas, housing a database. The project utilizes two modules: one for the cluster itself and another for setting up the Virtual Private Cloud (VPC). The VPC enables a peering connection with the MongoDB Atlas cluster, thus enhancing security by establishing a reliable connection that is happening over a private network.
 
-Datadog will be implemented to monitor the health and performance of the cluster to ensure that it is functioning as expected with regards to the number instances used and the compute size for some of the instances depending on the level of scalability that this cluster adopts. It is important to note that this project also adheres to the best secuirty practices with regards to using pre-commits to ensure that my terraform code or infrastructure does not have an security risks, and that it follows the best practice when it comes to securtiy. Terratests were utilised as a means to ensure module funactionality.
+Datadog is integrated to monitor the database's health and performance as well as the cluster's, ensuring it operates optimally amidst scalability adjustments. The project adheres to security best practices by employing pre-commits to mitigate potential security risks in the Terraform code. Additionally, Terratests validate module functionality to ensure that they are working as intended.
 
-Now that I provided a brief overview for the project, I will delve into the various parts of the project, and discuss these parts in great depth as a way to give you, the reader, a deeper understanding of how this project is built, and how you can create this project for yourself as well.
+Now, let's delve into each project component, providing an in-depth understanding for viewers interested in replicating this project.
 
 <h2> Cluster Module </h2>
 The cluster module comprises a number of files: .gitignore, cluster.tf, output.tf, terraform.tfvars, variables.tf, and versions.tf.
 
-Here is a graphic that shows the directory structure for this module:
+Here is a graphic that shows the directory structure for this module directory:
 ```hcl
 cluster/
 ├── .gitignore
@@ -286,6 +286,36 @@ MongoDB Atlas is a fully managed cloud database service that provides a variety 
 Ease of Management: MongoDB Atlas handles database operations such as provisioning, patching, and scaling, reducing the administrative overhead.
 
 Automated Backups: Regular automated backups with point-in-time recovery ensure your data is safe and recoverable.
+
+<h4> High Availability and Reliability </h4>
+Built-In Replication: Atlas provides automated replication across multiple availability zones, ensuring high availability and fault tolerance.
+
+Self-Healing Clusters: Automatically detects and recovers from node failures, ensuring minimal downtime.
+
+<h4> Scalability </h4>
+Horizontal Scaling: Easily scale out your database by adding more shards to distribute data and workload.
+
+Vertical Scaling: Increase the capacity of your database instances with a few clicks without downtime.
+
+<h4> Security </h4>
+End-to-End Encryption: Data is encrypted at rest and in transit, ensuring data security.
+
+Compliance: MongoDB Atlas complies with various standards such as GDPR, HIPAA, and SOC 2, making it suitable for sensitive data.
+
+<h4> Global Distribution </h4>
+Multi-Region Deployments: Deploy your database across multiple regions to provide low-latency access to users worldwide.
+
+Global Clusters: Automatically route read and write operations to the nearest data center.
+
+<h4> Integrated Tools </h4>
+Data Visualization: Built-in tools like MongoDB Charts allow for easy visualization of your data.
+
+Monitoring and Alerts: Comprehensive monitoring and alerting systems to keep track of database performance and health.
+
+<h4> Cost-Effectiveness </h4>
+Pay-As-You-Go Pricing: Flexible pricing model that allows you to pay only for the resources you use.
+
+Operational Efficiency: Reduces the need for a dedicated DBA team, lowering operational costs.
 
 <h2> VPC Module </h2>
 Now that we have discussed about the various contents of the 'cluster' module, we will now discuss about the 'VPC' module which will create the resources needed for the vpc infrastructure that is going to have a peering connection with our mongodb atlas cluster.
@@ -591,8 +621,50 @@ resource "aws_route" "to_mongodb_atlas" {
 ```
 This resource creates a route in the AWS route table to the MongoDB Atlas cluster through the VPC peering connection.
 
+Before moving onto the section that is revolved around the CI/CD pipeline for this project and what tool was employed to do this, it would make sense to provide an overview for the various benefits of establishing a peering connection between a vpc and a mongodb atlas database.
+
+<h2> Benefits of Using a Peering Connection Between VPC and MongoDB Atlas Cluster </h2>
+Establishing a peering connection between your AWS VPC (Virtual Private Cloud) and your MongoDB Atlas cluster provides several advantages, enhancing the overall performance, security, and manageability of your infrastructure. Here are some of the key benefits:
+
+<h4>Enhanced Security </h4>
+Private Network Communication: Peering connections allow your VPC to communicate with the MongoDB Atlas cluster over a private network, eliminating exposure to the public internet and reducing the risk of attacks.
+
+Controlled Access: By using security groups and network ACLs (Access Control Lists), you can define strict access controls, ensuring that only authorized instances within your VPC can access the database.
+
+<h4> Improved Performance </h4>
+Low Latency: Direct communication through a peering connection reduces network latency, leading to faster data access and improved application performance.
+
+High Bandwidth: Peering connections typically offer higher bandwidth compared to public internet connections, enabling efficient data transfer and handling larger volumes of data traffic.
+
+<h4> Cost Savings </h4>
+Reduced Data Transfer Costs: Data transfer between your VPC and the MongoDB Atlas cluster over a peering connection is usually cheaper compared to transferring data over the internet.
+
+No NAT Gateway Costs: Eliminates the need for a NAT (Network Address Translation) gateway to facilitate communication between your VPC and the Atlas cluster, further reducing costs.
+
 <h2> .github/workflows </h2>
 This directory contains the CI/CD(continuous integration and continuous delivery) pipeline used to deployed the resources for this project to both MongoDB atlas and AWS.
+
+<h2> Simplified Network Architecture </h2>
+Direct Connectivity: Peering connections provide a straightforward network setup, enabling seamless integration between your application servers in the VPC and the MongoDB Atlas cluster.
+
+Consistent IP Addressing: Maintains consistent IP addressing, making network management and troubleshooting simpler.
+
+<h4> Increased Reliability </h4>
+Stable Connectivity: Private connections are less susceptible to internet outages and fluctuations, offering more stable and reliable connectivity.
+
+Redundancy: You can configure multiple peering connections for redundancy, ensuring high availability and resilience in your network architecture.
+
+<h4> Enhanced Compliance </h4>
+Regulatory Requirements: Many compliance standards and regulations require that sensitive data be transferred over private networks rather than the public internet. Peering connections help meet these regulatory requirements.
+
+Data Sovereignty: Ensures that data stays within the geographic boundaries of your cloud provider's infrastructure, supporting data sovereignty policies.
+
+<h4> Seamless Integration </h4>
+Consistent Network Policies: Allows you to apply consistent network policies and monitoring across your VPC and MongoDB Atlas cluster, streamlining operations and improving security posture.
+
+Compatibility: Fully compatible with other AWS services, allowing for seamless integration with your existing AWS infrastructure.
+
+By leveraging a peering connection between your AWS VPC and MongoDB Atlas cluster, you can achieve a more secure, efficient, and reliable setup for your database applications. This integration not only enhances performance but also simplifies network management and helps meet compliance requirements, making it an essential component of a robust cloud architecture.
 
 <h3> GitHub Actions Workflow for Terraform </h3>
 
