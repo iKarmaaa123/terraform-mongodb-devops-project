@@ -277,6 +277,16 @@ random = {
 ```
 The Random provider is used to generate random values, such as passwords. In this configuration, it is used to create secure random passwords for the MongoDB Atlas database users.
 
+<h2> Benefits of Using MongoDB Atlas for Your Database </h2>
+Before moving onto the 'VPC' module segment, it is important that we explore the benefits of using a mongodb atlas cluster for your database - particularly, some of the security and scalability benefits that it brings as well.
+
+MongoDB Atlas is a fully managed cloud database service that provides a variety of benefits for developers and organizations. Here are some of the key advantages of housing your database within MongoDB Atlas
+
+<h4> Fully Managed Service </h4>
+Ease of Management: MongoDB Atlas handles database operations such as provisioning, patching, and scaling, reducing the administrative overhead.
+
+Automated Backups: Regular automated backups with point-in-time recovery ensure your data is safe and recoverable.
+
 <h2> VPC Module </h2>
 Now that we have discussed about the various contents of the 'cluster' module, we will now discuss about the 'VPC' module which will create the resources needed for the vpc infrastructure that is going to have a peering connection with our mongodb atlas cluster.
 
@@ -966,3 +976,65 @@ func TestVpcCidrBlockValue(t *testing.T) {
 	assert.Equal(t, "10.0.0.0/16", output)
 }
 ```
+<h4> Examples directory </h4>
+The 'examples' directory contains the 2 modules that were explained previously - this being the 'cluster' module and 'vpc' module. The contents within these 2 modules in the example directory are the exact same as those present in 'examples' directory and, therefore, do not need breakdown. These are the two modules that I decided to test to ensure adequate module functionality.
+
+<h2> Pre-commits file </h2>
+This configuration file sets up pre-commit hooks to ensure consistent and secure Terraform code. Pre-commit hooks are scripts that run before a commit is made, helping to enforce code quality and standards.
+
+```hcl
+repos:
+  - repo: https://github.com/terraform-docs/terraform-docs
+    rev: "v0.16.0"
+    hooks:
+      - id: terraform-docs-go
+        args: ["markdown", "table", "--output-file", "README.md", "./"]
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: "v1.74.1"
+    hooks:
+      - id: terraform_checkov
+      - id: terraform_fmt
+      - id: terraform_providers_lock
+      - id: terraform_tflint
+      - id: terraform_tfsec
+      - id: terraform_validate
+```
+
+<h4> Repository: terraform-docs </h4>
+```hcl
+- repo: https://github.com/terraform-docs/terraform-docs
+  rev: "v0.16.0"
+  hooks:
+    - id: terraform-docs-go
+      args: ["markdown", "table", "--output-file", "README.md", "./"]
+```
+- This configuration sets up the terraform-docs tool to generate documentation for your Terraform modules.
+- Specifies the repository URL for terraform-docs.
+- Specifies the version of terraform-docs to use (v0.16.0).
+- terraform-docs-go is the hook that runs terraform-docs.
+- The arguments specify that the output format should be Markdown in a table format, and the output should be saved 
+  to README.md.
+
+<h4>Repository: pre-commit-terraform</h4>
+```hcl
+- repo: https://github.com/antonbabenko/pre-commit-terraform
+  rev: "v1.74.1"
+  hooks:
+    - id: terraform_checkov
+    - id: terraform_fmt
+    - id: terraform_providers_lock
+    - id: terraform_tflint
+    - id: terraform_tfsec
+    - id: terraform_validate
+```
+- This configuration sets up various pre-commit hooks from the pre-commit-terraform repository to enforce Terraform code quality and security.
+- Specifies the repository URL for pre-commit-terraform.
+- Specifies the version of pre-commit-terraform to use (v1.74.1).
+Hooks:
+- terraform_checkov: Runs Checkov to perform static analysis of Terraform code for security and best practices.
+- terraform_fmt: Ensures that Terraform files are formatted according to the standard.
+- terraform_providers_lock: Locks Terraform provider dependencies.
+- terraform_tflint: Runs TFLint to detect errors and enforce best practices in Terraform code.
+- terraform_tfsec: Runs TFSec to perform static analysis of Terraform code for security issues.
+- terraform_validate: Runs terraform validate to ensure the configuration is syntactically valid and internally 
+  consistent.
