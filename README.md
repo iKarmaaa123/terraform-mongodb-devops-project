@@ -1073,6 +1073,7 @@ repos:
 ```
 
 <h4> Repository: terraform-docs </h4>
+
 ```hcl
 - repo: https://github.com/terraform-docs/terraform-docs
   rev: "v0.16.0"
@@ -1088,6 +1089,7 @@ repos:
   to README.md.
 
 <h4>Repository: pre-commit-terraform</h4>
+
 ```hcl
 - repo: https://github.com/antonbabenko/pre-commit-terraform
   rev: "v1.74.1"
