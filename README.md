@@ -25,6 +25,7 @@ export AWS_DEFAULT_REGION="<INSERT AWS REGION HERE>"
 The cluster module comprises a number of files: .gitignore, cluster.tf, output.tf, terraform.tfvars, variables.tf, and versions.tf.
 
 Here is a graphic that shows the directory structure for this module directory:
+
 ```hcl
 cluster/
 ├── .gitignore
@@ -147,6 +148,7 @@ output "region_name" {
 - Provides the region where the MongoDB Atlas cluster is deployed.
 
 <h4> Project Name </h4>
+
 ```hcl
 output "project_name" {
   value = "terraformProject"
@@ -155,6 +157,7 @@ output "project_name" {
 - Provides the name of the Terraform project.
 
 <h4> Organisation ID </h4>
+
 ```hcl
 output "organisation_id" {
   value = "65e24d75b0bbab5dbe0ebe25"
@@ -202,6 +205,7 @@ variable "atlas_cidr_block" {
 - Specifies the CIDR block for the MongoDB Atlas database. This is used for networking and access control purposes. The default CIDR block is 192.168.0.0/21.
 
 <h4> Username for MongoDB Atlas Account </h4>
+
 ```hcl
 variable "username" {
   type    = string
@@ -211,6 +215,7 @@ variable "username" {
 - The username for the MongoDB Atlas database user account. This user will have access to the database. The default username is user-1.
 
 <h4> MongoDB Atlas Cluster Name </h4>
+
 ```hcl
 variable "mongodbatlas_cluster_name" {
   type    = string
@@ -220,6 +225,7 @@ variable "mongodbatlas_cluster_name" {
 - The name of the MongoDB Atlas cluster. The cluster is where the databases will be hosted. The default cluster name is myFirstProject-Cluster.
 
 <h4> IP Address for Database Access </h4>
+
 ```hcl
 variable "ip_address" {
   type = string
@@ -245,6 +251,7 @@ This file is mostly used for defining the versions for both terraform, and the p
 
 <h4> Terraform Block </h4>
 The following terraform block specifies the required Terraform version and the providers necessary for this configuration. Each provider is essential for different aspects of the infrastructure setup:
+
 ```hcl
 terraform {
   required_version = ">= 1.0"
@@ -270,6 +277,7 @@ terraform {
 - Specifies the minimum required version of Terraform to use this configuration. In this case, the configuration requires Terraform version 1.0 or higher.
 
 <h4> AWS Provider </h4>
+
 ```hcl
 aws = {
   source  = "hashicorp/aws"
@@ -279,6 +287,7 @@ aws = {
 - The AWS provider is used to interact with the AWS services. In this configuration, it is necessary for provisioning and managing AWS infrastructure that supports the MongoDB Atlas cluster.
 
 <h4> MongoDB Atlas Provider </h4>
+
 ```hcl
 mongodbatlas = {
   source  = "mongodb/mongodbatlas"
@@ -288,6 +297,7 @@ mongodbatlas = {
 - The MongoDB Atlas provider allows Terraform to manage MongoDB Atlas resources such as projects, clusters, and database users. This provider is critical for setting up and configuring the MongoDB Atlas environment.
 
 <h4> Random Provider </h4>
+
 ```hcl
 random = {
   source  = "hashicorp/random"
@@ -297,49 +307,49 @@ random = {
 - The Random provider is used to generate random values, such as passwords. In this configuration, it is used to create secure random passwords for the MongoDB Atlas database users.
 
 <h2> Benefits of Using MongoDB Atlas for Your Database </h2>
-Before moving onto the 'VPC' module segment, it is important that we explore the benefits of using a mongodb atlas cluster for your database - particularly, some of the security and scalability benefits that it brings as well.
+- Before moving onto the 'VPC' module segment, it is important that we explore the benefits of using a mongodb atlas cluster for your database - particularly, some of the security and scalability benefits that it brings as well.
 
-MongoDB Atlas is a fully managed cloud database service that provides a variety of benefits for developers and organizations. Here are some of the key advantages of housing your database within MongoDB Atlas
+- MongoDB Atlas is a fully managed cloud database service that provides a variety of benefits for developers and organizations. Here are some of the key advantages of housing your database within MongoDB Atlas
 
 <h4> Fully Managed Service </h4>
-Ease of Management: MongoDB Atlas handles database operations such as provisioning, patching, and scaling, reducing the administrative overhead.
+- Ease of Management: MongoDB Atlas handles database operations such as provisioning, patching, and scaling, reducing the administrative overhead.
 
-Automated Backups: Regular automated backups with point-in-time recovery ensure your data is safe and recoverable.
+- Automated Backups: Regular automated backups with point-in-time recovery ensure your data is safe and recoverable.
 
 <h4> High Availability and Reliability </h4>
-Built-In Replication: Atlas provides automated replication across multiple availability zones, ensuring high availability and fault tolerance.
+- Built-In Replication: Atlas provides automated replication across multiple availability zones, ensuring high availability and fault tolerance.
 
-Self-Healing Clusters: Automatically detects and recovers from node failures, ensuring minimal downtime.
+- Self-Healing Clusters: Automatically detects and recovers from node failures, ensuring minimal downtime.
 
 <h4> Scalability </h4>
-Horizontal Scaling: Easily scale out your database by adding more shards to distribute data and workload.
+- Horizontal Scaling: Easily scale out your database by adding more shards to distribute data and workload.
 
-Vertical Scaling: Increase the capacity of your database instances with a few clicks without downtime.
+- Vertical Scaling: Increase the capacity of your database instances with a few clicks without downtime.
 
 <h4> Security </h4>
-End-to-End Encryption: Data is encrypted at rest and in transit, ensuring data security.
+- End-to-End Encryption: Data is encrypted at rest and in transit, ensuring data security.
 
-Compliance: MongoDB Atlas complies with various standards such as GDPR, HIPAA, and SOC 2, making it suitable for sensitive data.
+- Compliance: MongoDB Atlas complies with various standards such as GDPR, HIPAA, and SOC 2, making it suitable for sensitive data.
 
 <h4> Global Distribution </h4>
-Multi-Region Deployments: Deploy your database across multiple regions to provide low-latency access to users worldwide.
+- Multi-Region Deployments: Deploy your database across multiple regions to provide low-latency access to users worldwide.
 
-Global Clusters: Automatically route read and write operations to the nearest data center.
+- Global Clusters: Automatically route read and write operations to the nearest data center.
 
 <h4> Integrated Tools </h4>
-Data Visualization: Built-in tools like MongoDB Charts allow for easy visualization of your data.
+- Data Visualization: Built-in tools like MongoDB Charts allow for easy visualization of your data.
 
-Monitoring and Alerts: Comprehensive monitoring and alerting systems to keep track of database performance and health.
+- Monitoring and Alerts: Comprehensive monitoring and alerting systems to keep track of database performance and health.
 
 <h4> Cost-Effectiveness </h4>
-Pay-As-You-Go Pricing: Flexible pricing model that allows you to pay only for the resources you use.
+- Pay-As-You-Go Pricing: Flexible pricing model that allows you to pay only for the resources you use.
 
-Operational Efficiency: Reduces the need for a dedicated DBA team, lowering operational costs.
+- Operational Efficiency: Reduces the need for a dedicated DBA team, lowering operational costs.
 
 <h2> VPC Module </h2>
-Now that we have discussed about the various contents of the 'cluster' module, we will now discuss about the 'VPC' module which will create the resources needed for the vpc infrastructure that is going to have a peering connection with our mongodb atlas cluster.
+- Now that we have discussed about the various contents of the 'cluster' module, we will now discuss about the 'VPC' module which will create the resources needed for the vpc infrastructure that is going to have a peering connection with our mongodb atlas cluster.
 
-Here is a graphical visualisation of what the VPC module looks like:
+- Here is a graphical visualisation of what the VPC module looks like:
 ```hcl
 vpc/
 ├── .gitignore
@@ -352,6 +362,7 @@ vpc/
 The following resources are used to set up a Virtual Private Cloud (VPC) and associated networking components in AWS using Terraform. Each resource is configured with specific parameters and tags:
 
 AWS VPC:
+
 ```hcl
 resource "aws_vpc" "my_vpc" {
   cidr_block = var.vpc_cidr_block
