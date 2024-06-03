@@ -121,7 +121,7 @@ MongoDB Version 6.0
 Replication Specs: Configured with an electable node set and analytic node set, both using AWS inthe 'US_EAST_1' region. The electable set consists of 3 nodes of size M10, and the analytics set consists of 1 node of M10.
 
 <h3> Outputs </h3>
--These outputs are primarily intended for use in Terratest with Go to validate various parts of the infrastructure:
+- These outputs are primarily intended for use in Terratest with Go to validate various parts of the infrastructure:
 
 <h4> MongoDB Atlas Project ID </h4>
 ```hcl
@@ -307,46 +307,55 @@ random = {
 - The Random provider is used to generate random values, such as passwords. In this configuration, it is used to create secure random passwords for the MongoDB Atlas database users.
 
 <h2> Benefits of Using MongoDB Atlas for Your Database </h2>
+
 - Before moving onto the 'VPC' module segment, it is important that we explore the benefits of using a mongodb atlas cluster for your database - particularly, some of the security and scalability benefits that it brings as well.
 
 - MongoDB Atlas is a fully managed cloud database service that provides a variety of benefits for developers and organizations. Here are some of the key advantages of housing your database within MongoDB Atlas
 
 <h4> Fully Managed Service </h4>
+
 - Ease of Management: MongoDB Atlas handles database operations such as provisioning, patching, and scaling, reducing the administrative overhead.
 
 - Automated Backups: Regular automated backups with point-in-time recovery ensure your data is safe and recoverable.
 
 <h4> High Availability and Reliability </h4>
+
 - Built-In Replication: Atlas provides automated replication across multiple availability zones, ensuring high availability and fault tolerance.
 
 - Self-Healing Clusters: Automatically detects and recovers from node failures, ensuring minimal downtime.
 
 <h4> Scalability </h4>
+
 - Horizontal Scaling: Easily scale out your database by adding more shards to distribute data and workload.
 
 - Vertical Scaling: Increase the capacity of your database instances with a few clicks without downtime.
 
 <h4> Security </h4>
+
 - End-to-End Encryption: Data is encrypted at rest and in transit, ensuring data security.
 
 - Compliance: MongoDB Atlas complies with various standards such as GDPR, HIPAA, and SOC 2, making it suitable for sensitive data.
 
 <h4> Global Distribution </h4>
+
 - Multi-Region Deployments: Deploy your database across multiple regions to provide low-latency access to users worldwide.
 
 - Global Clusters: Automatically route read and write operations to the nearest data center.
 
 <h4> Integrated Tools </h4>
+
 - Data Visualization: Built-in tools like MongoDB Charts allow for easy visualization of your data.
 
 - Monitoring and Alerts: Comprehensive monitoring and alerting systems to keep track of database performance and health.
 
 <h4> Cost-Effectiveness </h4>
+
 - Pay-As-You-Go Pricing: Flexible pricing model that allows you to pay only for the resources you use.
 
 - Operational Efficiency: Reduces the need for a dedicated DBA team, lowering operational costs.
 
 <h2> VPC Module </h2>
+
 - Now that we have discussed about the various contents of the 'cluster' module, we will now discuss about the 'VPC' module which will create the resources needed for the vpc infrastructure that is going to have a peering connection with our mongodb atlas cluster.
 
 - Here is a graphical visualisation of what the VPC module looks like:
@@ -359,7 +368,8 @@ vpc/
 └── vpc.tf
 ```
 <h3> vpc.tf </h3>
-The following resources are used to set up a Virtual Private Cloud (VPC) and associated networking components in AWS using Terraform. Each resource is configured with specific parameters and tags:
+
+- The following resources are used to set up a Virtual Private Cloud (VPC) and associated networking components in AWS using Terraform. Each resource is configured with specific parameters and tags:
 
 AWS VPC:
 
@@ -372,7 +382,7 @@ resource "aws_vpc" "my_vpc" {
   }
 }
 ```
-Creates a new Virtual Private Cloud (VPC) with the specified CIDR block and name.
+- Creates a new Virtual Private Cloud (VPC) with the specified CIDR block and name.
 
 AWS Default Security Group:
 ```hcl
@@ -395,7 +405,7 @@ resource "aws_default_security_group" "default" {
   }
 }
 ```
-Configures the default security group for the VPC to allow all inbound and outbound traffic.
+- Configures the default security group for the VPC to allow all inbound and outbound traffic.
 
 AWS Subnet:
 ```hcl
@@ -409,7 +419,7 @@ resource "aws_subnet" "my_subnet" {
   }
 }
 ```
-Creates a new subnet within the specified VPC, CIDR block, and availability zone.
+- Creates a new subnet within the specified VPC, CIDR block, and availability zone.
 
 AWS Internet Gateway:
 ```hcl
@@ -421,7 +431,7 @@ resource "aws_internet_gateway" "gw" {
   }
 }
 ```
-Creates an Internet Gateway for the VPC, allowing the VPC to connect to the internet.
+- Creates an Internet Gateway for the VPC, allowing the VPC to connect to the internet.
 
 AWS Route Table:
 ```hcl
@@ -438,7 +448,7 @@ resource "aws_route_table" "my_route_table" {
   }
 }
 ```
-Creates a route table for the VPC with a route that directs all traffic to the Internet Gateway.
+- Creates a route table for the VPC with a route that directs all traffic to the Internet Gateway.
 
 AWS Route Table Association:
 ```hcl
@@ -447,10 +457,10 @@ resource "aws_route_table_association" "my_route_table_association" {
   route_table_id = aws_route_table.my_route_table.id
 }
 ```
-Associates the specified subnet with the route table, enabling the subnet to use the routes defined in the route table.
+- Associates the specified subnet with the route table, enabling the subnet to use the routes defined in the route table.
 
 <h3> Variables.tf </h3>
-The following variables are used to configure the AWS VPC and its associated resources. Each variable has a default value which can be overridden as needed.
+- The following variables are used to configure the AWS VPC and its associated resources. Each variable has a default value which can be overridden as needed.
 
 Provider Name:
 ```hcl
@@ -459,7 +469,7 @@ variable "provider_name" {
   default = "AWS"
 }
 ```
-Specifies the cloud provider to use. The default value is AWS.
+- Specifies the cloud provider to use. The default value is AWS.
 
 Internet Gateway Name:
 ```hcl
@@ -468,7 +478,7 @@ variable "internet_gateway_name" {
   default = "mongodb-internet-gateway"
 }
 ```
-The name tag for the Internet Gateway. The default name is mongodb-internet-gateway.
+- The name tag for the Internet Gateway. The default name is mongodb-internet-gateway.
 
 VPC CIDR Block:
 ```hcl
@@ -486,7 +496,7 @@ variable "subnet_cidr_block" {
   default = "10.0.0.0/24"
 }
 ```
- Specifies the CIDR block for the public subnet within the VPC. The default value is 10.0.0.0/24.
+ - Specifies the CIDR block for the public subnet within the VPC. The default value is 10.0.0.0/24.
 
  VPC Name:
  ```hcl
@@ -495,7 +505,7 @@ variable "subnet_cidr_block" {
   default = "mongodb-vpc"
 }
 ```
-The name tag for the VPC. The default name is mongodb-vpc.
+- The name tag for the VPC. The default name is mongodb-vpc.
 
 Public Subnet Name:
  ```hcl
@@ -504,7 +514,7 @@ variable "public_subnet_name" {
   default = "mongodb-subnet"
 }
  ```
-The name tag for the public subnet. The default name is mongodb-subnet.
+- The name tag for the public subnet. The default name is mongodb-subnet.
 
 Route Table Name:
 ```hcl
@@ -513,7 +523,7 @@ variable "route_table_name" {
   default = "mongodb-route-table"
 }
 ```
-The name tag for the route table. The default name is mongodb-route-table.
+- The name tag for the route table. The default name is mongodb-route-table.
 
 Availability Zone:
 ```hcl
@@ -522,10 +532,11 @@ variable "availability_zone" {
   default = "us-east-1a"
 }
 ```
-Specifies the availability zone for the subnet. The default value is us-east-1a.
+- Specifies the availability zone for the subnet. The default value is us-east-1a.
 
 <h3> Terraform.tfvars </h3>
-To override the default values, create a terraform.tfvars file with your custom values:
+
+- To override the default values, create a terraform.tfvars file with your custom values:
 
 ```hcl
 provider_name          = "YOUR_CUSTOM_PROVIDER_NAME"
@@ -538,7 +549,8 @@ route_table_name       = "YOUR_CUSTOM_ROUTE_TABLE_NAME"
 availability_zone      = "YOUR_CUSTOM_AVAILABILITY_ZONE"
 ```
 <h3> Outputs.tf </h3>
-The following outputs provide essential information about the AWS VPC and its associated resources. Some of these outputs are primarily intended for use in Terratests to validate the infrastructure setup:
+
+- The following outputs provide essential information about the AWS VPC and its associated resources. Some of these outputs are primarily intended for use in Terratests to validate the infrastructure setup:
 
 VPC ID:
 ```hcl
@@ -554,7 +566,7 @@ output "route_table_cidr_block" {
     value = aws_vpc.my_vpc.cidr_block
 }
 ```
-The output for the CIDR block of the VPC associated with the route table.
+- The output for the CIDR block of the VPC associated with the route table.
 
 Route Table ID:
 ```hcl
@@ -562,7 +574,7 @@ output "route_table_id" {
     value = aws_route_table.my_route_table.id
 }
 ```
-The output for the ID of the created route table.
+- The output for the ID of the created route table.
 
 AWS Account ID:
 ```hcl
@@ -570,10 +582,11 @@ output "aws_account_id" {
     value = "648767092427"
 }
 ```
-The AWS account ID. This is a static value representing the account under which the resources are created. This output can be used in Terratests to confirm that the resources are being created in the correct AWS account.
+- The AWS account ID. This is a static value representing the account under which the resources are created. This output can be used in Terratests to confirm that the resources are being created in the correct AWS account.
 
 <h2> main </h2>
-The main directory will combine the work we did in the 'cluster' module directory and 'VPC' module directory. I will not provide a overview for the .gitignore file or the versions.tf file as they have already been provided explained. Here is an overview of what the directory structure looks like:
+
+- The main directory will combine the work we did in the 'cluster' module directory and 'VPC' module directory. I will not provide a overview for the .gitignore file or the versions.tf file as they have already been provided explained. Here is an overview of what the directory structure looks like:
 
 ```hcl
 # Directory structure for 'main' directory
