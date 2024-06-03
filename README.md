@@ -113,7 +113,7 @@ resource "mongodbatlas_advanced_cluster" "atlas-cluster" {
   }
 }
 ```
--A MongoDB Atlas advanced cluster is created with the following specifications:
+- A MongoDB Atlas advanced cluster is created with the following specifications:
 Type: Replica set
 Backup: Enabled
 MongoDB Version 6.0
