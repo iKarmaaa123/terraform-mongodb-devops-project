@@ -8,6 +8,18 @@ Datadog is integrated to monitor the database's health and performance as well a
 
 Now, let's delve into each project component, providing an in-depth understanding for viewers interested in replicating this project.
 
+<h2> Exporting Credentials </h2>
+It is important to note that when working with providers such as Mongodb Atlas and AWS that you have a set of credentials that grants you programmtic access to those respective platforms. Not doing this will prevent you from deploying the neccessary resources to those platforms. These are the following credentials that need to be exported via using a window terminal:
+
+```hcl
+export MONGODB_ATLAS_PUBLIC_KEY="<insert your public key here>"
+export MONGODB_ATLAS_PRIVATE_KEY="<insert your private key here>"
+```
+```hcl
+export AWS_ACCESS_KEY_ID="<INSERT YOUR KEY HERE>"
+export AWS_SECRET_ACCESS_KEY="<INSERT YOUR KEY HERE>"
+export AWS_DEFAULT_REGION="<INSERT AWS REGION HERE>"
+```
 <h2> Cluster Module </h2>
 The cluster module comprises a number of files: .gitignore, cluster.tf, output.tf, terraform.tfvars, variables.tf, and versions.tf.
 
@@ -25,8 +37,7 @@ cluster/
 This specific file ensures that no important files that contain sensitive information or files that take up a lot of storage are pushed to the GitHub repository.
 
 <h3> cluster.tf </h3>
-This cluster.tf file contains a terraform configuration that sets up a MongoDB Atlas project with a secured databse cluster, user, and access control. The  following resources are created and configured:
-
+This cluster.tf file contains a terraform configuration that sets up a MongoDB Atlas project with a secured databse cluster, user, and access control. The following resources are created and configured:
 
 MongoDB Atlas Project:
 ```hcl
