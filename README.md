@@ -250,7 +250,8 @@ ip_address             = "YOUR_CUSTOM_IP_ADDRESS"
 This file is mostly used for defining the versions for both terraform, and the providers that you will be using in your own respective project. Here is a rundown of how this file is structured, and what each part of this configuration code means.
 
 <h4> Terraform Block </h4>
-The following terraform block specifies the required Terraform version and the providers necessary for this configuration. Each provider is essential for different aspects of the infrastructure setup:
+
+- The following terraform block specifies the required Terraform version and the providers necessary for this configuration. Each provider is essential for different aspects of the infrastructure setup:
 
 ```hcl
 terraform {
@@ -422,6 +423,7 @@ resource "aws_subnet" "my_subnet" {
 - Creates a new subnet within the specified VPC, CIDR block, and availability zone.
 
 AWS Internet Gateway:
+
 ```hcl
 resource "aws_internet_gateway" "gw" {
   vpc_id = aws_vpc.my_vpc.id
@@ -434,6 +436,7 @@ resource "aws_internet_gateway" "gw" {
 - Creates an Internet Gateway for the VPC, allowing the VPC to connect to the internet.
 
 AWS Route Table:
+
 ```hcl
 resource "aws_route_table" "my_route_table" {
   vpc_id = aws_vpc.my_vpc.id
@@ -451,6 +454,7 @@ resource "aws_route_table" "my_route_table" {
 - Creates a route table for the VPC with a route that directs all traffic to the Internet Gateway.
 
 AWS Route Table Association:
+
 ```hcl
 resource "aws_route_table_association" "my_route_table_association" {
   subnet_id      = aws_subnet.my_subnet.id
@@ -463,6 +467,7 @@ resource "aws_route_table_association" "my_route_table_association" {
 - The following variables are used to configure the AWS VPC and its associated resources. Each variable has a default value which can be overridden as needed.
 
 Provider Name:
+
 ```hcl
 variable "provider_name" {
   type    = string
@@ -472,6 +477,7 @@ variable "provider_name" {
 - Specifies the cloud provider to use. The default value is AWS.
 
 Internet Gateway Name:
+
 ```hcl
 variable "internet_gateway_name" {
   type    = string
@@ -481,15 +487,17 @@ variable "internet_gateway_name" {
 - The name tag for the Internet Gateway. The default name is mongodb-internet-gateway.
 
 VPC CIDR Block:
+
 ```hcl
 variable "vpc_cidr_block" {
   type    = string
   default = "10.0.0.0/16"
 }
 ```
-Specifies the CIDR block for the VPC. The default value is 10.0.0.0/16.
+- Specifies the CIDR block for the VPC. The default value is 10.0.0.0/16.
 
 Public Subnet CIDR Block:
+
 ```hcl
 variable "subnet_cidr_block" {
   type = string
@@ -499,6 +507,7 @@ variable "subnet_cidr_block" {
  - Specifies the CIDR block for the public subnet within the VPC. The default value is 10.0.0.0/24.
 
  VPC Name:
+ 
  ```hcl
  variable "vpc_name" {
   type = string
@@ -508,6 +517,7 @@ variable "subnet_cidr_block" {
 - The name tag for the VPC. The default name is mongodb-vpc.
 
 Public Subnet Name:
+
  ```hcl
 variable "public_subnet_name" {
   type = string
@@ -517,6 +527,7 @@ variable "public_subnet_name" {
 - The name tag for the public subnet. The default name is mongodb-subnet.
 
 Route Table Name:
+
 ```hcl
 variable "route_table_name" {
   type = string
@@ -526,6 +537,7 @@ variable "route_table_name" {
 - The name tag for the route table. The default name is mongodb-route-table.
 
 Availability Zone:
+
 ```hcl
 variable "availability_zone" {
   type    = string
@@ -553,6 +565,7 @@ availability_zone      = "YOUR_CUSTOM_AVAILABILITY_ZONE"
 - The following outputs provide essential information about the AWS VPC and its associated resources. Some of these outputs are primarily intended for use in Terratests to validate the infrastructure setup:
 
 VPC ID:
+
 ```hcl
 output "vpc_id" {
     value = aws_vpc.my_vpc.id
@@ -561,6 +574,7 @@ output "vpc_id" {
 The output for the ID of the created VPC.
 
 Route Table CIDR Block:
+
 ```hcl
 output "route_table_cidr_block" {
     value = aws_vpc.my_vpc.cidr_block
@@ -569,6 +583,7 @@ output "route_table_cidr_block" {
 - The output for the CIDR block of the VPC associated with the route table.
 
 Route Table ID:
+
 ```hcl
 output "route_table_id" {
     value = aws_route_table.my_route_table.id
@@ -577,6 +592,7 @@ output "route_table_id" {
 - The output for the ID of the created route table.
 
 AWS Account ID:
+
 ```hcl
 output "aws_account_id" {
     value = "648767092427"
@@ -631,6 +647,7 @@ resource "mongodbatlas_network_peering" "peering" {
 This resource creates a network peering connection between the MongoDB Atlas cluster and the AWS VPC.
 
 MongoDB Atlas Network Container:
+
 ```hcl
 resource "mongodbatlas_network_container" "test" {
   project_id       = module.cluster.mongodb_atlas_project_id
@@ -642,6 +659,7 @@ resource "mongodbatlas_network_container" "test" {
 This resource creates a network container for the MongoDB Atlas cluster, necessary for peering.
 
 AWS VPC Peering Connection Accepter:
+
 ```hcl
 resource "aws_vpc_peering_connection_accepter" "peering_accept" {
   vpc_peering_connection_id = mongodbatlas_network_peering.peering.connection_id
@@ -655,6 +673,7 @@ resource "aws_vpc_peering_connection_accepter" "peering_accept" {
 This resource accepts the VPC peering connection request from MongoDB Atlas.
 
 AWS Route to MongoDB Atlas:
+
 ```hcl
 resource "aws_route" "to_mongodb_atlas" {
   route_table_id            = module.vpc.route_table_id
@@ -670,42 +689,50 @@ Before moving onto the section that is revolved around the CI/CD pipeline for th
 Establishing a peering connection between your AWS VPC (Virtual Private Cloud) and your MongoDB Atlas cluster provides several advantages, enhancing the overall performance, security, and manageability of your infrastructure. Here are some of the key benefits:
 
 <h4>Enhanced Security </h4>
-Private Network Communication: Peering connections allow your VPC to communicate with the MongoDB Atlas cluster over a private network, eliminating exposure to the public internet and reducing the risk of attacks.
 
-Controlled Access: By using security groups and network ACLs (Access Control Lists), you can define strict access controls, ensuring that only authorized instances within your VPC can access the database.
+- Private Network Communication: Peering connections allow your VPC to communicate with the MongoDB Atlas cluster over a private network, eliminating exposure to the public internet and reducing the risk of attacks.
+
+- Controlled Access: By using security groups and network ACLs (Access Control Lists), you can define strict access controls, ensuring that only authorized instances within your VPC can access the database.
 
 <h4> Improved Performance </h4>
-Low Latency: Direct communication through a peering connection reduces network latency, leading to faster data access and improved application performance.
 
-High Bandwidth: Peering connections typically offer higher bandwidth compared to public internet connections, enabling efficient data transfer and handling larger volumes of data traffic.
+- Low Latency: Direct communication through a peering connection reduces network latency, leading to faster data access and improved application performance.
+
+- High Bandwidth: Peering connections typically offer higher bandwidth compared to public internet connections, enabling efficient data transfer and handling larger volumes of data traffic.
 
 <h4> Cost Savings </h4>
-Reduced Data Transfer Costs: Data transfer between your VPC and the MongoDB Atlas cluster over a peering connection is usually cheaper compared to transferring data over the internet.
 
-No NAT Gateway Costs: Eliminates the need for a NAT (Network Address Translation) gateway to facilitate communication between your VPC and the Atlas cluster, further reducing costs.
+- Reduced Data Transfer Costs: Data transfer between your VPC and the MongoDB Atlas cluster over a peering connection is usually cheaper compared to transferring data over the internet.
+
+- No NAT Gateway Costs: Eliminates the need for a NAT (Network Address Translation) gateway to facilitate communication between your VPC and the Atlas cluster, further reducing costs.
 
 <h2> .github/workflows </h2>
-This directory contains the CI/CD(continuous integration and continuous delivery) pipeline used to deployed the resources for this project to both MongoDB atlas and AWS.
+
+- This directory contains the CI/CD(continuous integration and continuous delivery) pipeline used to deployed the resources for this project to both MongoDB atlas and AWS.
 
 <h2> Simplified Network Architecture </h2>
-Direct Connectivity: Peering connections provide a straightforward network setup, enabling seamless integration between your application servers in the VPC and the MongoDB Atlas cluster.
 
-Consistent IP Addressing: Maintains consistent IP addressing, making network management and troubleshooting simpler.
+- Direct Connectivity: Peering connections provide a straightforward network setup, enabling seamless integration between your application servers in the VPC and the MongoDB Atlas cluster.
+
+- Consistent IP Addressing: Maintains consistent IP addressing, making network management and troubleshooting simpler.
 
 <h4> Increased Reliability </h4>
-Stable Connectivity: Private connections are less susceptible to internet outages and fluctuations, offering more stable and reliable connectivity.
 
-Redundancy: You can configure multiple peering connections for redundancy, ensuring high availability and resilience in your network architecture.
+- Stable Connectivity: Private connections are less susceptible to internet outages and fluctuations, offering more stable and reliable connectivity.
+
+- Redundancy: You can configure multiple peering connections for redundancy, ensuring high availability and resilience in your network architecture.
 
 <h4> Enhanced Compliance </h4>
-Regulatory Requirements: Many compliance standards and regulations require that sensitive data be transferred over private networks rather than the public internet. Peering connections help meet these regulatory requirements.
 
-Data Sovereignty: Ensures that data stays within the geographic boundaries of your cloud provider's infrastructure, supporting data sovereignty policies.
+- Regulatory Requirements: Many compliance standards and regulations require that sensitive data be transferred over private networks rather than the public internet. Peering connections help meet these regulatory requirements.
+
+- Data Sovereignty: Ensures that data stays within the geographic boundaries of your cloud provider's infrastructure, supporting data sovereignty policies.
 
 <h4> Seamless Integration </h4>
-Consistent Network Policies: Allows you to apply consistent network policies and monitoring across your VPC and MongoDB Atlas cluster, streamlining operations and improving security posture.
 
-Compatibility: Fully compatible with other AWS services, allowing for seamless integration with your existing AWS infrastructure.
+- Consistent Network Policies: Allows you to apply consistent network policies and monitoring across your VPC and MongoDB Atlas cluster, streamlining operations and improving security posture.
+
+- Compatibility: Fully compatible with other AWS services, allowing for seamless integration with your existing AWS infrastructure.
 
 By leveraging a peering connection between your AWS VPC and MongoDB Atlas cluster, you can achieve a more secure, efficient, and reliable setup for your database applications. This integration not only enhances performance but also simplifies network management and helps meet compliance requirements, making it an essential component of a robust cloud architecture.
 
