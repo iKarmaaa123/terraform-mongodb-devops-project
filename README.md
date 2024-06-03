@@ -9,12 +9,13 @@ Datadog is integrated to monitor the database's health and performance as well a
 Now, let's delve into each project component, providing an in-depth understanding for viewers interested in replicating this project.
 
 <h2> Exporting Credentials </h2>
-It is important to note that when working with providers such as Mongodb Atlas and AWS that you have a set of credentials that grants you programmtic access to those respective platforms. Not doing this will prevent you from deploying the neccessary resources to those platforms. These are the following credentials that need to be exported via using a window terminal:
+When working with providers like MongoDB Atlas and AWS, having a set of credentials that grants programmatic access to these platforms is crucial. Without these credentials, deploying necessary resources to these platforms will be impossible. The following credentials need to be exported using a Windows terminal:
 
 ```hcl
 export MONGODB_ATLAS_PUBLIC_KEY="<insert your public key here>"
 export MONGODB_ATLAS_PRIVATE_KEY="<insert your private key here>"
 ```
+
 ```hcl
 export AWS_ACCESS_KEY_ID="<INSERT YOUR KEY HERE>"
 export AWS_SECRET_ACCESS_KEY="<INSERT YOUR KEY HERE>"
@@ -34,21 +35,21 @@ cluster/
 └── versions.tf
 ```
 <h3> .gitignore file </h3>
-This specific file ensures that no important files that contain sensitive information or files that take up a lot of storage are pushed to the GitHub repository.
+- This specific file ensures that no important files that contain sensitive information or files that take up a lot of storage are pushed to the GitHub repository.
 
 <h3> cluster.tf </h3>
-This cluster.tf file contains a terraform configuration that sets up a MongoDB Atlas project with a secured databse cluster, user, and access control. The following resources are created and configured:
+- This cluster.tf file contains a terraform configuration that sets up a MongoDB Atlas project with a secured databse cluster, user, and access control. The following resources are created and configured:
 
-MongoDB Atlas Project:
+<h4> MongoDB Atlas Project </h4>
 ```hcl
 resource "mongodbatlas_project" "atlas-project" {
   org_id = var.atlas_org_id
   name   = var.atlas_project_name
 }
 ```
-A new MongoDB Atlas project is created within the specified organization using the provided project name.
+- A new MongoDB Atlas project is created within the specified organization using the provided project name.
 
-Database User:
+<h4> Database User </h4>
 ```hcl
 resource "mongodbatlas_database_user" "db-user" {
   username           = var.username
@@ -61,9 +62,9 @@ resource "mongodbatlas_database_user" "db-user" {
   }
 }
 ```
-A database user with read and write access to the specific database is created. The password is generated securely and associated with the project.
+- A database user with read and write access to the specific database is created. The password is generated securely and associated with the project.
 
-Database Password:
+<h4> Database Password </h4>
 ```hcl
 resource "random_password" "db-user-password" {
   length           = 16
@@ -71,7 +72,7 @@ resource "random_password" "db-user-password" {
   override_special = "_%@"
 }
 ```
-A secure random password is generated for the database user, ensuring it contains special characters for added security.
+- A secure random password is generated for the database user, ensuring it contains special characters for added security.
 
 Database IP Access List:
 ```hcl
@@ -80,7 +81,7 @@ resource "mongodbatlas_project_ip_access_list" "ip" {
   ip_address = var.ip_address  
 }
 ```
-Access to the MongoDB Atlas cluster is restricted to the specified IP address, enhancing security by ensuring only trusted IPs can connect.
+- Access to the MongoDB Atlas cluster is restricted to the specified IP address, enhancing security by ensuring only trusted IPs can connect.
 
 Atlas Advanced Cluster:
 ```hcl
@@ -107,58 +108,58 @@ resource "mongodbatlas_advanced_cluster" "atlas-cluster" {
   }
 }
 ```
-A MongoDB Atlas advanced cluster is created with the following specifications:
+- A MongoDB Atlas advanced cluster is created with the following specifications:
 Type: Replica set
 Backup: Enabled
 MongoDB Version 6.0
 Replication Specs: Configured with an electable node set and analytic node set, both using AWS inthe 'US_EAST_1' region. The electable set consists of 3 nodes of size M10, and the analytics set consists of 1 node of M10.
 
 <h3> Outputs </h3>
-These outputs are primarily intended for use in Terratest with Go to validate various parts of the infrastructure:
+- These outputs are primarily intended for use in Terratest with Go to validate various parts of the infrastructure:
 
-MongoDB Atlas Project ID:
+<h4> MongoDB Atlas Project ID </h4>
 ```hcl
 output "mongodb_atlas_project_id" {
     value = mongodbatlas_project.atlas-project.id
 }
 ```
-Provides the ID of the created MongoDB Atlas project.
+- Provides the ID of the created MongoDB Atlas project.
 
-MongoDB Atlas CIDR Block:
+<h4> MongoDB Atlas CIDR Block </h4>
 ```hcl
 output "mongodb_atlas_cidr_block" {
     value = "192.168.0.0/21"
 }
 ```
-Provides the CIDR block used in the MongoDB Atlas project.
+- Provides the CIDR block used in the MongoDB Atlas project.
 
-MongoDB Atlas Region:
+<h4> MongoDB Atlas Region </h4>
 ```hcl
 output "region_name" {
     value = "US_EAST_1"
 }
 ```
-Provides the region where the MongoDB Atlas cluster is deployed.
+- Provides the region where the MongoDB Atlas cluster is deployed.
 
-Project Name:
+<h4> Project Name </h4>
 ```hcl
 output "project_name" {
   value = "terraformProject"
 }
 ```
-Provides the name of the Terraform project.
+- Provides the name of the Terraform project.
 
-Organisation ID:
+<h4> Organisation ID </h4>
 ```hcl
 output "organisation_id" {
   value = "65e24d75b0bbab5dbe0ebe25"
 }
 ```
-Provides the ID of the organisation in MongoDB Atlas.
+- Provides the ID of the organisation in MongoDB Atlas.
 
 <h3> Variables.tf </h3>
 The following variables are used to configure the MongoDB Atlas project and its associated resources. Each variable has a default value which can be overridden as needed using a terraform.tfvars file (this will be shown in the following section):
-MongoDB Atlas Region:
+<h4> MongoDB Atlas Region </h4>
 
 ```hcl
 variable "atlas_region" {
@@ -166,61 +167,61 @@ variable "atlas_region" {
   default = "US_EAST_1"
 }
 ```
-Specifies the region where the MongoDB Atlas cluster will be deployed. The default region is US_EAST_1.
+- Specifies the region where the MongoDB Atlas cluster will be deployed. The default region is US_EAST_1.
 
-Atlas Project Name:
+<h4> Atlas Project Name </h4>
 ```hcl
 variable "atlas_project_name" {
   type    = string
   default = "terraformProject"
 }
 ```
-The name of the MongoDB Atlas project. The default project name is terraformProject.
+- The name of the MongoDB Atlas project. The default project name is terraformProject.
 
-Atlas Organization ID:
+<h4> Atlas Organization ID </h4>
 ```hcl
 variable "atlas_org_id" {
   type    = string
   default = "65e24d75b0bbab5dbe0ebe25"
 }
 ```
-The organization ID for MongoDB Atlas. This ID is used to associate the project with the correct MongoDB Atlas organization. The default organization ID is 65e24d75b0bbab5dbe0ebe25.
+- The organization ID for MongoDB Atlas. This ID is used to associate the project with the correct MongoDB Atlas organization. The default organization ID is 65e24d75b0bbab5dbe0ebe25.
 
-CIDR Value for Atlas Database:
+<h4> CIDR Value for Atlas Database </h4>
 ```hcl
 variable "atlas_cidr_block" {
   type    = string
   default = "192.168.0.0/21"
 }
 ```
-Specifies the CIDR block for the MongoDB Atlas database. This is used for networking and access control purposes. The default CIDR block is 192.168.0.0/21.
+- Specifies the CIDR block for the MongoDB Atlas database. This is used for networking and access control purposes. The default CIDR block is 192.168.0.0/21.
 
-Username for MongoDB Atlas Account:
+<h4> Username for MongoDB Atlas Account </h4>
 ```hcl
 variable "username" {
   type    = string
   default = "user-1"
 }
 ```
-The username for the MongoDB Atlas database user account. This user will have access to the database. The default username is user-1.
+- The username for the MongoDB Atlas database user account. This user will have access to the database. The default username is user-1.
 
-MongoDB Atlas Cluster Name:
+<h4> MongoDB Atlas Cluster Name </h4>
 ```hcl
 variable "mongodbatlas_cluster_name" {
   type    = string
   default = "myFirstProject-Cluster"
 }
 ```
-The name of the MongoDB Atlas cluster. The cluster is where the databases will be hosted. The default cluster name is myFirstProject-Cluster.
+- The name of the MongoDB Atlas cluster. The cluster is where the databases will be hosted. The default cluster name is myFirstProject-Cluster.
 
-IP Address for Database Access:
+<h4> IP Address for Database Access </h4>
 ```hcl
 variable "ip_address" {
   type = string
   default = "86.157.19.11"
 }
 ```
-The IP address allowed to access the MongoDB Atlas cluster. This is used for IP whitelisting to ensure only trusted IPs can connect to the database. The default IP address is 86.157.19.11.
+- The IP address allowed to access the MongoDB Atlas cluster. This is used for IP whitelisting to ensure only trusted IPs can connect to the database. The default IP address is 86.157.19.11.
 
 <h3> Terraform.tfvars </h3>
 To override the default values, create a terraform.tfvars file with your custom values:
@@ -237,7 +238,7 @@ ip_address             = "YOUR_CUSTOM_IP_ADDRESS"
 <h3> Versions.tf </h3>
 This file is mostly used for defining the versions for both terraform, and the providers that you will be using in your own respective project. Here is a rundown of how this file is structured, and what each part of this configuration code means.
 
-Terraform Block
+<h4> Terraform Block </h4>
 The following terraform block specifies the required Terraform version and the providers necessary for this configuration. Each provider is essential for different aspects of the infrastructure setup:
 ```hcl
 terraform {
@@ -259,34 +260,36 @@ terraform {
   }
 }
 ```
-required_version: Specifies the minimum required version of Terraform to use this configuration. In this case, the configuration requires Terraform version 1.0 or higher.
+<h4> required_version </h4>
 
-AWS Provider:
+- Specifies the minimum required version of Terraform to use this configuration. In this case, the configuration requires Terraform version 1.0 or higher.
+
+<h4> AWS Provider </h4>
 ```hcl
 aws = {
   source  = "hashicorp/aws"
   version = "~> 5.0"
 }
 ```
-The AWS provider is used to interact with the AWS services. In this configuration, it is necessary for provisioning and managing AWS infrastructure that supports the MongoDB Atlas cluster.
+- The AWS provider is used to interact with the AWS services. In this configuration, it is necessary for provisioning and managing AWS infrastructure that supports the MongoDB Atlas cluster.
 
-MongoDB Atlas Provider:
+<h4> MongoDB Atlas Provider </h4>
 ```hcl
 mongodbatlas = {
   source  = "mongodb/mongodbatlas"
   version = "~> 1.15.0"
 }
 ```
-The MongoDB Atlas provider allows Terraform to manage MongoDB Atlas resources such as projects, clusters, and database users. This provider is critical for setting up and configuring the MongoDB Atlas environment.
+- The MongoDB Atlas provider allows Terraform to manage MongoDB Atlas resources such as projects, clusters, and database users. This provider is critical for setting up and configuring the MongoDB Atlas environment.
 
-Random Provider:
+<h4> Random Provider </h4>
 ```hcl
 random = {
   source  = "hashicorp/random"
   version = "~> 3.6.0"
 }
 ```
-The Random provider is used to generate random values, such as passwords. In this configuration, it is used to create secure random passwords for the MongoDB Atlas database users.
+- The Random provider is used to generate random values, such as passwords. In this configuration, it is used to create secure random passwords for the MongoDB Atlas database users.
 
 <h2> Benefits of Using MongoDB Atlas for Your Database </h2>
 Before moving onto the 'VPC' module segment, it is important that we explore the benefits of using a mongodb atlas cluster for your database - particularly, some of the security and scalability benefits that it brings as well.
