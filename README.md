@@ -36,10 +36,10 @@ cluster/
 └── versions.tf
 ```
 <h3> .gitignore file </h3>
-- This specific file ensures that no important files that contain sensitive information or files that take up a lot of storage are pushed to the GitHub repository.
+This specific file ensures that no important files that contain sensitive information or files that take up a lot of storage are pushed to the GitHub repository.
 
 <h3> cluster.tf </h3>
-- This cluster.tf file contains a terraform configuration that sets up a MongoDB Atlas project with a secured databse cluster, user, and access control. The following resources are created and configured:
+This cluster.tf file contains a terraform configuration that sets up a MongoDB Atlas project with a secured databse cluster, user, and access control. The following resources are created and configured:
 
 <h4> MongoDB Atlas Project </h4>
 
@@ -121,17 +121,19 @@ MongoDB Version 6.0
 Replication Specs: Configured with an electable node set and analytic node set, both using AWS inthe 'US_EAST_1' region. The electable set consists of 3 nodes of size M10, and the analytics set consists of 1 node of M10.
 
 <h3> Outputs </h3>
-- These outputs are primarily intended for use in Terratest with Go to validate various parts of the infrastructure:
+These outputs are primarily intended for use in Terratest with Go to validate various parts of the infrastructure:
 
 <h4> MongoDB Atlas Project ID </h4>
+
 ```hcl
 output "mongodb_atlas_project_id" {
     value = mongodbatlas_project.atlas-project.id
 }
 ```
--Provides the ID of the created MongoDB Atlas project.
+- Provides the ID of the created MongoDB Atlas project.
 
 <h4> MongoDB Atlas CIDR Block </h4>
+
 ```hcl
 output "mongodb_atlas_cidr_block" {
     value = "192.168.0.0/21"
@@ -140,6 +142,7 @@ output "mongodb_atlas_cidr_block" {
 - Provides the CIDR block used in the MongoDB Atlas project.
 
 <h4> MongoDB Atlas Region </h4>
+
 ```hcl
 output "region_name" {
     value = "US_EAST_1"
@@ -167,6 +170,7 @@ output "organisation_id" {
 
 <h3> Variables.tf </h3>
 The following variables are used to configure the MongoDB Atlas project and its associated resources. Each variable has a default value which can be overridden as needed using a terraform.tfvars file (this will be shown in the following section):
+
 <h4> MongoDB Atlas Region </h4>
 
 ```hcl
@@ -250,8 +254,7 @@ ip_address             = "YOUR_CUSTOM_IP_ADDRESS"
 This file is mostly used for defining the versions for both terraform, and the providers that you will be using in your own respective project. Here is a rundown of how this file is structured, and what each part of this configuration code means.
 
 <h4> Terraform Block </h4>
-
-- The following terraform block specifies the required Terraform version and the providers necessary for this configuration. Each provider is essential for different aspects of the infrastructure setup:
+The following terraform block specifies the required Terraform version and the providers necessary for this configuration. Each provider is essential for different aspects of the infrastructure setup:
 
 ```hcl
 terraform {
@@ -274,8 +277,7 @@ terraform {
 }
 ```
 <h4> required_version </h4>
-
-- Specifies the minimum required version of Terraform to use this configuration. In this case, the configuration requires Terraform version 1.0 or higher.
+Specifies the minimum required version of Terraform to use this configuration. In this case, the configuration requires Terraform version 1.0 or higher.
 
 <h4> AWS Provider </h4>
 
@@ -369,10 +371,9 @@ vpc/
 └── vpc.tf
 ```
 <h3> vpc.tf </h3>
+The following resources are used to set up a Virtual Private Cloud (VPC) and associated networking components in AWS using Terraform. Each resource is configured with specific parameters and tags:
 
-- The following resources are used to set up a Virtual Private Cloud (VPC) and associated networking components in AWS using Terraform. Each resource is configured with specific parameters and tags:
-
-AWS VPC:
+<h4> AWS VPC </h4>
 
 ```hcl
 resource "aws_vpc" "my_vpc" {
@@ -385,7 +386,8 @@ resource "aws_vpc" "my_vpc" {
 ```
 - Creates a new Virtual Private Cloud (VPC) with the specified CIDR block and name.
 
-AWS Default Security Group:
+<h4> AWS Default Security Group </h4>
+
 ```hcl
 resource "aws_default_security_group" "default" {
   vpc_id = aws_vpc.my_vpc.id
@@ -408,7 +410,8 @@ resource "aws_default_security_group" "default" {
 ```
 - Configures the default security group for the VPC to allow all inbound and outbound traffic.
 
-AWS Subnet:
+<h4> AWS Subnet </h4>
+
 ```hcl
 resource "aws_subnet" "my_subnet" {
   cidr_block = var.subnet_cidr_block
@@ -422,7 +425,7 @@ resource "aws_subnet" "my_subnet" {
 ```
 - Creates a new subnet within the specified VPC, CIDR block, and availability zone.
 
-AWS Internet Gateway:
+<h4> AWS Internet Gateway </h4>
 
 ```hcl
 resource "aws_internet_gateway" "gw" {
@@ -435,7 +438,7 @@ resource "aws_internet_gateway" "gw" {
 ```
 - Creates an Internet Gateway for the VPC, allowing the VPC to connect to the internet.
 
-AWS Route Table:
+<h4> AWS Route Table </h4>
 
 ```hcl
 resource "aws_route_table" "my_route_table" {
@@ -453,7 +456,7 @@ resource "aws_route_table" "my_route_table" {
 ```
 - Creates a route table for the VPC with a route that directs all traffic to the Internet Gateway.
 
-AWS Route Table Association:
+<h4> AWS Route Table Association </h4>
 
 ```hcl
 resource "aws_route_table_association" "my_route_table_association" {
@@ -464,9 +467,9 @@ resource "aws_route_table_association" "my_route_table_association" {
 - Associates the specified subnet with the route table, enabling the subnet to use the routes defined in the route table.
 
 <h3> Variables.tf </h3>
-- The following variables are used to configure the AWS VPC and its associated resources. Each variable has a default value which can be overridden as needed.
+The following variables are used to configure the AWS VPC and its associated resources. Each variable has a default value which can be overridden as needed.
 
-Provider Name:
+<h4> Provider Name </h4>
 
 ```hcl
 variable "provider_name" {
@@ -476,7 +479,7 @@ variable "provider_name" {
 ```
 - Specifies the cloud provider to use. The default value is AWS.
 
-Internet Gateway Name:
+<h4> Internet Gateway Name </h4>
 
 ```hcl
 variable "internet_gateway_name" {
@@ -486,7 +489,7 @@ variable "internet_gateway_name" {
 ```
 - The name tag for the Internet Gateway. The default name is mongodb-internet-gateway.
 
-VPC CIDR Block:
+<h4> VPC CIDR Block </h4>
 
 ```hcl
 variable "vpc_cidr_block" {
@@ -496,7 +499,7 @@ variable "vpc_cidr_block" {
 ```
 - Specifies the CIDR block for the VPC. The default value is 10.0.0.0/16.
 
-Public Subnet CIDR Block:
+<h4> Public Subnet CIDR Block </h4>
 
 ```hcl
 variable "subnet_cidr_block" {
@@ -506,7 +509,7 @@ variable "subnet_cidr_block" {
 ```
  - Specifies the CIDR block for the public subnet within the VPC. The default value is 10.0.0.0/24.
 
- VPC Name:
+ <h4> VPC Name </h4>
  
  ```hcl
  variable "vpc_name" {
@@ -516,7 +519,7 @@ variable "subnet_cidr_block" {
 ```
 - The name tag for the VPC. The default name is mongodb-vpc.
 
-Public Subnet Name:
+<h4> Public Subnet Name </h4>
 
  ```hcl
 variable "public_subnet_name" {
@@ -526,7 +529,7 @@ variable "public_subnet_name" {
  ```
 - The name tag for the public subnet. The default name is mongodb-subnet.
 
-Route Table Name:
+<h4> Route Table Name </h4>
 
 ```hcl
 variable "route_table_name" {
@@ -536,7 +539,7 @@ variable "route_table_name" {
 ```
 - The name tag for the route table. The default name is mongodb-route-table.
 
-Availability Zone:
+<h4> Availability Zone </h4>
 
 ```hcl
 variable "availability_zone" {
@@ -564,7 +567,7 @@ availability_zone      = "YOUR_CUSTOM_AVAILABILITY_ZONE"
 
 - The following outputs provide essential information about the AWS VPC and its associated resources. Some of these outputs are primarily intended for use in Terratests to validate the infrastructure setup:
 
-VPC ID:
+<h4> VPC ID </h4>
 
 ```hcl
 output "vpc_id" {
@@ -573,7 +576,7 @@ output "vpc_id" {
 ```
 The output for the ID of the created VPC.
 
-Route Table CIDR Block:
+<h4> Route Table CIDR Block </h4>
 
 ```hcl
 output "route_table_cidr_block" {
@@ -582,7 +585,7 @@ output "route_table_cidr_block" {
 ```
 - The output for the CIDR block of the VPC associated with the route table.
 
-Route Table ID:
+<h4> Route Table ID </h4>
 
 ```hcl
 output "route_table_id" {
@@ -591,7 +594,7 @@ output "route_table_id" {
 ```
 - The output for the ID of the created route table.
 
-AWS Account ID:
+<h4> AWS Account ID </h4>
 
 ```hcl
 output "aws_account_id" {
@@ -613,27 +616,29 @@ main/
 ```
 
 <h3> main.tf </h3>
-This configuration sets up a MongoDB Atlas cluster and an AWS VPC, then establishes a network peering connection between them.
+This configuration sets up a MongoDB Atlas cluster and an AWS VPC through calling their respective modules, and then establishes a network peering connection between the two.
 
-MongoDB Atlas Cluster Module:
+<h4> MongoDB Atlas Cluster Module </h4>
 
 ```hcl
 module "cluster" {
     source = "../modules/cluster"
 }
 ```
-This module sets up the MongoDB Atlas cluster. The source points to the cluster module directory.
+- This module sets up the MongoDB Atlas cluster. The source points to the cluster module directory.
 
-AWS VPC Module:
+<h4> AWS VPC Module </h4>
 
 ```hcl
 module "vpc" {
     source = "../modules/vpc"
 }
 ```
+- This module sets up the MongoDB Atlas cluster. The source points to the cluster module directory.
 
-MongoDB Atlas Network Peering:
+<h4> MongoDB Atlas Network Peering </h4>
 
+```hcl
 resource "mongodbatlas_network_peering" "peering" {
   project_id             = module.cluster.mongodb_atlas_project_id
   atlas_cidr_block       = module.cluster.mongodb_atlas_cidr_block
@@ -644,9 +649,11 @@ resource "mongodbatlas_network_peering" "peering" {
   vpc_id                 = module.vpc.vpc_id
   aws_account_id         = module.vpc.aws_account_id
 }
-This resource creates a network peering connection between the MongoDB Atlas cluster and the AWS VPC.
+```
 
-MongoDB Atlas Network Container:
+- This resource creates a network peering connection between the MongoDB Atlas cluster and the AWS VPC.
+
+<h4> MongoDB Atlas Network Container </h4>
 
 ```hcl
 resource "mongodbatlas_network_container" "test" {
@@ -656,9 +663,9 @@ resource "mongodbatlas_network_container" "test" {
   region_name      = "US_EAST_1"
 }
 ```
-This resource creates a network container for the MongoDB Atlas cluster, necessary for peering.
+- This resource creates a network container for the MongoDB Atlas cluster, necessary for peering.
 
-AWS VPC Peering Connection Accepter:
+<h4> AWS VPC Peering Connection Accepter </h4>
 
 ```hcl
 resource "aws_vpc_peering_connection_accepter" "peering_accept" {
@@ -670,9 +677,9 @@ resource "aws_vpc_peering_connection_accepter" "peering_accept" {
   }
 }
 ```
-This resource accepts the VPC peering connection request from MongoDB Atlas.
+- This resource accepts the VPC peering connection request from MongoDB Atlas.
 
-AWS Route to MongoDB Atlas:
+<h4> AWS Route to MongoDB Atlas </h4>
 
 ```hcl
 resource "aws_route" "to_mongodb_atlas" {
@@ -681,7 +688,7 @@ resource "aws_route" "to_mongodb_atlas" {
   vpc_peering_connection_id = mongodbatlas_network_peering.peering.connection_id
 }
 ```
-This resource creates a route in the AWS route table to the MongoDB Atlas cluster through the VPC peering connection.
+- This resource creates a route in the AWS route table to the MongoDB Atlas cluster through the VPC peering connection.
 
 Before moving onto the section that is revolved around the CI/CD pipeline for this project and what tool was employed to do this, it would make sense to provide an overview for the various benefits of establishing a peering connection between a vpc and a mongodb atlas database.
 
@@ -738,9 +745,7 @@ By leveraging a peering connection between your AWS VPC and MongoDB Atlas cluste
 
 <h3> GitHub Actions Workflow for Terraform </h3>
 
-This GitHub Actions workflow automates the deployment of your Terraform configurations whenever there is a push to the repository. It sets up the necessary environment, checks out the code, and runs the Terraform commands to initialize, plan, and apply the configurations.
-
-This workflow ensures that your Terraform configurations are automatically deployed and managed whenever there is a change in the repository, leveraging the capabilities of GitHub Actions for CI/CD.
+This GitHub Actions workflow automates the deployment of your Terraform configurations whenever there is a push to the repository. It sets up the necessary environment, checks out the code, and runs the Terraform commands to initialize, plan, and apply the configurations. This workflow ensures that your Terraform configurations are automatically deployed and managed whenever there is a change in the repository, leveraging the capabilities of GitHub Actions for CI/CD.
 
 ```hcl
 name: 'Terraform'
@@ -790,21 +795,23 @@ jobs:
           terraform apply -auto-approve
 
   ```
-Trigger:
+<h4> Trigger </h4>
 
 ```hcl
 on: push
 ```
-The workflow is triggered by any push to the repository.
+- The workflow is triggered by any push to the repository.
 
-Permissions:
+<h4> Permissions </h4>
+
 ```hcl
 permissions:
   contents: read
 ```
-Sets the permissions for the workflow. In this case, it allows read access to the contents.
+- Sets the permissions for the workflow. In this case, it allows read access to the contents.
 
-Environment Variables:
+<h4> Environment Variables </h4>
+
 ```hcl
 env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
