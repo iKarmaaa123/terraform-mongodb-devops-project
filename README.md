@@ -41,6 +41,7 @@ cluster/
 - This cluster.tf file contains a terraform configuration that sets up a MongoDB Atlas project with a secured databse cluster, user, and access control. The following resources are created and configured:
 
 <h4> MongoDB Atlas Project </h4>
+
 ```hcl
 resource "mongodbatlas_project" "atlas-project" {
   org_id = var.atlas_org_id
@@ -50,6 +51,7 @@ resource "mongodbatlas_project" "atlas-project" {
 - A new MongoDB Atlas project is created within the specified organization using the provided project name.
 
 <h4> Database User </h4>
+
 ```hcl
 resource "mongodbatlas_database_user" "db-user" {
   username           = var.username
@@ -65,6 +67,7 @@ resource "mongodbatlas_database_user" "db-user" {
 - A database user with read and write access to the specific database is created. The password is generated securely and associated with the project.
 
 <h4> Database Password </h4>
+
 ```hcl
 resource "random_password" "db-user-password" {
   length           = 16
@@ -75,6 +78,7 @@ resource "random_password" "db-user-password" {
 - A secure random password is generated for the database user, ensuring it contains special characters for added security.
 
 Database IP Access List:
+
 ```hcl
 resource "mongodbatlas_project_ip_access_list" "ip" {
   project_id = mongodbatlas_project.atlas-project.id
@@ -84,6 +88,7 @@ resource "mongodbatlas_project_ip_access_list" "ip" {
 - Access to the MongoDB Atlas cluster is restricted to the specified IP address, enhancing security by ensuring only trusted IPs can connect.
 
 Atlas Advanced Cluster:
+
 ```hcl
 resource "mongodbatlas_advanced_cluster" "atlas-cluster" {
   project_id             = mongodbatlas_project.atlas-project.id
@@ -108,14 +113,14 @@ resource "mongodbatlas_advanced_cluster" "atlas-cluster" {
   }
 }
 ```
-- A MongoDB Atlas advanced cluster is created with the following specifications:
+-A MongoDB Atlas advanced cluster is created with the following specifications:
 Type: Replica set
 Backup: Enabled
 MongoDB Version 6.0
 Replication Specs: Configured with an electable node set and analytic node set, both using AWS inthe 'US_EAST_1' region. The electable set consists of 3 nodes of size M10, and the analytics set consists of 1 node of M10.
 
 <h3> Outputs </h3>
-- These outputs are primarily intended for use in Terratest with Go to validate various parts of the infrastructure:
+-These outputs are primarily intended for use in Terratest with Go to validate various parts of the infrastructure:
 
 <h4> MongoDB Atlas Project ID </h4>
 ```hcl
@@ -123,7 +128,7 @@ output "mongodb_atlas_project_id" {
     value = mongodbatlas_project.atlas-project.id
 }
 ```
-- Provides the ID of the created MongoDB Atlas project.
+-Provides the ID of the created MongoDB Atlas project.
 
 <h4> MongoDB Atlas CIDR Block </h4>
 ```hcl
