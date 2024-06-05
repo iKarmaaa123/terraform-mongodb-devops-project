@@ -311,9 +311,7 @@ random = {
 
 <h2> Benefits of Using MongoDB Atlas for Your Database </h2>
 
-- Before moving onto the 'VPC' module segment, it is important that we explore the benefits of using a mongodb atlas cluster for your database - particularly, some of the security and scalability benefits that it brings as well.
-
-- MongoDB Atlas is a fully managed cloud database service that provides a variety of benefits for developers and organizations. Here are some of the key advantages of housing your database within MongoDB Atlas
+- MongoDB Atlas is a fully managed cloud database service that provides a variety of benefits for developers and organizations. Here are some of the key advantages of housing your database within MongoDB Atlas:
 
 <h4> Fully Managed Service </h4>
 
