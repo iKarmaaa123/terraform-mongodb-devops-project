@@ -829,7 +829,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
 ```
-Defines the build job that runs on the latest version of Ubuntu. A job is a set of steps in a workflow that is executed on the same runner. Each step is either a shell script that will be executed, or an action that will be run. Steps are executed in order and are dependent on each other. Since each step is executed on the same runner, you can share data from one step to another.
+- Defines the build job that runs on the latest version of Ubuntu. A job is a set of steps in a workflow that is executed on the same runner. Each step is either a shell script that will be executed, or an action that will be run. Steps are executed in order 
+  and are dependent on each other. Since each step is executed on the same runner, you can share data from one step to another.
 
 Checkout Code:
 
@@ -837,7 +838,7 @@ Checkout Code:
 - name: Checkout
   uses: actions/checkout@v3
 ```
-This step uses the checkout action to clone the repository's code into the GitHub Actions runner.
+- This step uses the checkout action to clone the repository's code into the GitHub Actions runner.
 
 Get IP Addresses:
 
@@ -845,7 +846,7 @@ Get IP Addresses:
 - name: Get IP Addresses
   uses: candidob/get-runner-ip@v1.0.0
 ```
-This step uses the get-runner-ip action to retrieve the IP addresses of the GitHub Actions runner. This might be useful for configuring access lists or security groups.
+- This step uses the get-runner-ip action to retrieve the IP addresses of the GitHub Actions runner. This might be useful for configuring access lists or security groups.
 
 Set Up Terraform:
 
@@ -853,7 +854,7 @@ Set Up Terraform:
 - name: Set up Terraform
   uses: hashicorp/setup-terraform@v1
 ```
-This step uses the setup-terraform action to install the specified version of Terraform CLI on the runner, ensuring the correct version is used.
+- This step uses the setup-terraform action to install the specified version of Terraform CLI on the runner, ensuring the correct version is used.
 
 <h4> Terraform Init </h4>
 ```hcl
@@ -863,7 +864,7 @@ This step uses the setup-terraform action to install the specified version of Te
     cd main
     terraform init
 ```
-This step initializes the Terraform configuration in the main directory by running the terraform init command. It downloads the necessary provider plugins and sets up the backend configuration.
+- This step initializes the Terraform configuration in the main directory by running the terraform init command. It downloads the necessary provider plugins and sets up the backend configuration.
 
 Terraform Plan:
 ```hcl
@@ -873,7 +874,7 @@ Terraform Plan:
     cd main
     terraform plan
 ```
-This step creates an execution plan for Terraform by running the terraform plan command in the main directory. It shows what actions Terraform will take to achieve the desired state defined in the configuration files.
+- This step creates an execution plan for Terraform by running the terraform plan command in the main directory. It shows what actions Terraform will take to achieve the desired state defined in the configuration files.
 
 Terraform Apply:
 ```hcl
@@ -883,7 +884,7 @@ Terraform Apply:
     cd main
     terraform apply -auto-approve
 ```
-This step applies the Terraform configuration by running the terraform apply -auto-approve command in the main directory. The -auto-approve flag automatically approves the changes without waiting for manual confirmation.
+- This step applies the Terraform configuration by running the terraform apply -auto-approve command in the main directory. The -auto-approve flag automatically approves the changes without waiting for manual confirmation.
 
 <h2> tests </h2>
 Within this directory we will discuss about the various terratests used for testing various aspects of my infrastructure. Here is an overview of what this directory structure looks like:
@@ -940,7 +941,7 @@ func TestAWSAccountNumberValue(t *testing.T) {
 ```hcl
 package test
 ```
-Declares the package name for the test file. In this case, the package is named test.
+- Declares the package name for the test file. In this case, the package is named test.
 
 <h4> Import Statements </h4>
 
@@ -953,18 +954,18 @@ import (
 ```
 Imports the necessary packages:
 
-testing: Provides support for automated testing of Go packages.
+- testing: Provides support for automated testing of Go packages.
 
-terraform: Provides helper functions for running Terraform commands in tests.
+- terraform: Provides helper functions for running Terraform commands in tests.
 
-assert: Provides assertion functions for testing.
+- assert: Provides assertion functions for testing.
 
 <h4> Test Function </h4>
 
 ```hcl
 func TestAWSAccountNumberValue(t *testing.T) {
 ```
-Defines the test function TestAWSAccountNumberValue which will run the test. The t *testing.T parameter is used to log errors and report test failures.
+- Defines the test function TestAWSAccountNumberValue which will run the test. The t *testing.T parameter is used to log errors and report test failures.
 
 <h4> Terraform Options </h4>
 
@@ -974,21 +975,21 @@ terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
 	TerraformDir: "./examples/vpc",
 })
 ```
-Constructs the Terraform options with default retryable errors. It sets the path to the Terraform code that will be tested ("./examples/vpc").
+- Constructs the Terraform options with default retryable errors. It sets the path to the Terraform code that will be tested ("./examples/vpc").
 
 <h4> Clean Up Resources </h4>
 
 ```hcl
 defer terraform.Destroy(t, terraformOptions)
 ```
-Schedules a cleanup of resources with terraform destroy at the end of the test, ensuring that any resources created during the test are destroyed.
+- Schedules a cleanup of resources with terraform destroy at the end of the test, ensuring that any resources created during the test are destroyed.
 
 <h4> Initialize and Apply Terraform Configuration </h4>
 
 ```hcl
 terraform.InitAndApply(t, terraformOptions)
 ```
-Runs terraform init and terraform apply. If there are any errors during these operations, the test will fail.
+- Runs terraform init and terraform apply. If there are any errors during these operations, the test will fail.
 
 <h4> Check Output Values </h4>
 
@@ -996,7 +997,7 @@ Runs terraform init and terraform apply. If there are any errors during these op
 output := terraform.Output(t, terraformOptions, "aws_account_id")
 assert.Equal(t, "648767092427", output)
 ```
-Runs terraform output to get the value of the aws_account_id output variable and checks that it matches the expected value (648767092427). If the output value does not match, the test will fail.
+- Runs terraform output to get the value of the aws_account_id output variable and checks that it matches the expected value (648767092427). If the output value does not match, the test will fail.
 
 <h2> organisation_id_test.go </h2>
 This terratest will also test to see if we are deploying the mongodb cluster resources to the correct organsation within mongodb atlas.
