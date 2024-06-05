@@ -4,7 +4,7 @@
 
 This Terraform project focuses on deploying a MongoDB Atlas cluster to MongoDB Atlas, housing a database. The project utilizes two modules: one for the cluster itself and another for setting up the Virtual Private Cloud (VPC). The VPC enables a peering connection with the MongoDB Atlas cluster, thus enhancing security by establishing a reliable connection that is happening over a private network.
 
-Datadog is integrated to monitor the database's health and performance as well as the cluster's, ensuring it operates optimally amidst scalability adjustments. The project adheres to security best practices by employing pre-commits to mitigate potential security risks in the Terraform code. Additionally, Terratests validate module functionality to ensure that they are working as intended.
+Datadog is integrated to monitor the health and performance of the database and cluster, ensuring it operates optimally amidst scalability adjustments. The project adheres to security best practices by employing pre-commits to mitigate potential security risks in the Terraform code. Additionally, Terratests validate module functionality to ensure that they are working as intended.
 
 Now, let's delve into each project component, providing an in-depth understanding for viewers interested in replicating this project.
 
