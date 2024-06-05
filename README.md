@@ -38,7 +38,7 @@ cluster/
 <h3> .gitignore file </h3>
 This specific file ensures that no important files that contain sensitive information or files that take up a lot of storage are pushed to the GitHub repository.
 
-<h3> cluster.tf </h3>
+<h3> Cluster.tf </h3>
 This cluster.tf file contains a terraform configuration that sets up a MongoDB Atlas project with a secured databse cluster, user, and access control. The following resources are created and configured:
 
 <h4> MongoDB Atlas Project </h4>
