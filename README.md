@@ -711,10 +711,6 @@ Establishing a peering connection between your AWS VPC (Virtual Private Cloud) a
 
 - No NAT Gateway Costs: Eliminates the need for a NAT (Network Address Translation) gateway to facilitate communication between your VPC and the Atlas cluster, further reducing costs.
 
-<h2> .github/workflows </h2>
-
-- This directory contains the CI/CD(continuous integration and continuous delivery) pipeline used to deployed the resources for this project to both MongoDB atlas and AWS.
-
 <h2> Simplified Network Architecture </h2>
 
 - Direct Connectivity: Peering connections provide a straightforward network setup, enabling seamless integration between your application servers in the VPC and the MongoDB Atlas cluster.
