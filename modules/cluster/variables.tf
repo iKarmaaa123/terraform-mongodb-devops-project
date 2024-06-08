@@ -33,9 +33,3 @@ variable "mongodbatlas_cluster_name" {
   type = string
   default = "myFirstProject-Cluster"
 }
-
-// ip address for ip address for database access
-variable "ip_address" {
-  type = string
-  default = "86.157.19.11"
-}
